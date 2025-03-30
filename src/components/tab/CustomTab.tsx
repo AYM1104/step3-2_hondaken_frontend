@@ -1,46 +1,34 @@
-// components/tab/CustomTabs.tsx
-'use client';
-
-import { Tabs, Tab, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 interface Props {
   tabs: string[];
-  activeTab: number;
-  onChange: (newIndex: number) => void;
+  activeTab: string;
+  onChange: (tab: string) => void;
 }
 
-const CustomTabs = ({ tabs, activeTab, onChange }: Props) => {
+const CustomTabSwitcher = ({ tabs, activeTab, onChange }: Props) => {
   return (
-    <Box sx={{ borderBottom: '1px solid #E0E0E0' }}>
-      <Tabs
-        value={activeTab}
-        onChange={(e, newValue) => onChange(newValue)}
-        centered
-        TabIndicatorProps={{
-          style: {
-            backgroundColor: '#FCC419', // 黄色い下線
-            height: '3px',
-          },
-        }}
-        sx={{
-          minHeight: '48px',
-          '& .MuiTab-root': {
-            color: '#ADB5BD', // 非アクティブ時の色
-            fontWeight: 400,
-            minHeight: '48px',
-          },
-          '& .Mui-selected': {
-            color: '#212529', // アクティブ時の色
-            fontWeight: 600,
-          },
-        }}
-      >
-        {tabs.map((label, index) => (
-          <Tab key={label} label={label} />
-        ))}
-      </Tabs>
+    <Box display="flex" justifyContent="center" gap={4} sx={{ borderBottom: '1px solid #E0E0E0', py: 2 }}>
+      {tabs.map((tab) => {
+        const isActive = tab === activeTab;
+        return (
+          <Box
+            key={tab}
+            onClick={() => onChange(tab)}
+            sx={{
+              cursor: 'pointer',
+              borderBottom: isActive ? '2px solid #FCC419' : '2px solid transparent',
+              color: isActive ? '#212529' : '#ADB5BD',
+              fontWeight: isActive ? 600 : 400,
+              pb: 0.5,
+            }}
+          >
+            <Typography>{tab}</Typography>
+          </Box>
+        );
+      })}
     </Box>
   );
 };
 
-export default CustomTabs;
+export default CustomTabSwitcher;

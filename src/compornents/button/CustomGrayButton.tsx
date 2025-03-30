@@ -24,16 +24,26 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
 type CustomGrayButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
-  sx?: ButtonProps['sx']; // ← 追加：sxを受け取れるように
+  sx?: ButtonProps['sx'];
+  startIcon?: React.ReactNode; 
+  endIcon?: React.ReactNode;   
 };
 
 export default function CustomGrayButton({
   children,
   onClick,
   sx,
+  startIcon,
+  endIcon,
 }: CustomGrayButtonProps) {
   return (
-    <StyledButton variant="contained" onClick={onClick} sx={sx}>
+    <StyledButton
+      variant="contained"
+      onClick={onClick}
+      sx={sx}
+      startIcon={startIcon}
+      endIcon={endIcon}
+    >
       {children}
     </StyledButton>
   );

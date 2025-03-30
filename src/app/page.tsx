@@ -1,14 +1,22 @@
+'use client';
+
 import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import CustomGrayButton from '@/components/button/CustomGrayButton';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CustomCardHome from '@/components/card/CustomCardHome';
+import CustomTab from '@/components/tab/CustomTab';
+import { useState } from 'react';
 
 
 
+const tabLabels = ['あずける', 'おむかえ'];
 
 export default function Page() {
+  const [activeTab, setActiveTab] = useState(0);
+
   return (
     <Box sx={{ width: '100%', height: '400px', position: 'relative' }}>
       {/* 背景画像（丸く切り抜き） */}
@@ -28,6 +36,7 @@ export default function Page() {
           fill
           style={{
             objectFit: 'cover',
+            objectPosition: 'center -130px',
           }}
         />
 
@@ -35,7 +44,7 @@ export default function Page() {
         <Box
           sx={{
             position: 'absolute',
-            top: '24px',
+            top: '260px',
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -62,6 +71,28 @@ export default function Page() {
             </Box>
           </CustomGrayButton>
         </Box>
+      </Box>
+      {/* タブ */}
+      <Box sx={{ mt: 4 }}>
+        <CustomTab
+          tabs={tabLabels}
+          activeTab={activeTab}
+          onChange={(newIndex) => setActiveTab(newIndex)}
+        />
+      </Box>
+
+      {/* タブに応じたコンテンツ */}
+      <Box sx={{ mt: 4, px: 2 }}>
+        {activeTab === 0 && (
+          <CustomCardHome
+            title="今日の予約"
+            storeName="Honda Cars 青山店"
+            date="2025年12月31日"
+            timeSlot="15:00〜17:00"
+            onClickQRCode={() => alert('QRコードを表示します')}
+          />
+        )}
+        {activeTab === 1 && <Typography>おむかえ予約の内容をここに表示</Typography>}
       </Box>
     </Box>
   );

@@ -9,11 +9,12 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
   backgroundColor: '#CED4DA',
   color: '#343A40',
   borderRadius: '999px',
-  padding: '12px 24px',
+  padding: '12px 12px',
   textTransform: 'none',
   fontWeight: 600,
   fontSize: '1rem',
   boxShadow: 'none',
+  whiteSpace: 'nowrap',
   '&:hover': {
     backgroundColor: '#BFC4CA',
     boxShadow: 'none',

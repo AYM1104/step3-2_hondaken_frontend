@@ -13,6 +13,7 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
   fontWeight: 600,
   fontSize: '1rem',
   boxShadow: 'none',
+  whiteSpace: 'nowrap',
   '&:hover': {
     backgroundColor: '#FAB005',
     boxShadow: 'none',

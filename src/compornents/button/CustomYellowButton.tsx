@@ -24,14 +24,16 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
 type CustomYellowButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
+  sx?: ButtonProps['sx']; // ← 追加：sxを外から渡せるように！
 };
 
 export default function CustomYellowButton({
   children,
   onClick,
+  sx,
 }: CustomYellowButtonProps) {
   return (
-    <StyledButton variant="contained" onClick={onClick}>
+    <StyledButton variant="contained" onClick={onClick} sx={sx}>
       {children}
     </StyledButton>
   );

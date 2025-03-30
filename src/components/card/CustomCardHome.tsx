@@ -63,4 +63,3 @@ const CustomCardHome = ({
   };
   
   export default CustomCardHome;
-

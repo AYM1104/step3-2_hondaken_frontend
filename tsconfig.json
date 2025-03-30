@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     // ✅ JSXの設定を "react-jsx" に変更（Next.js + TSでよく使う設定）
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     // "jsx": "preserve", // ← 元の設定。問題があればこちらに戻してもOK
     "incremental": true,
     "plugins": [

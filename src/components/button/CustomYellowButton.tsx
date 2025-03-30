@@ -4,7 +4,6 @@ import React from 'react';
 import { Button, ButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-// Buttonに渡すpropsの型を維持しつつスタイリング
 const StyledButton = styled(Button)<ButtonProps>(() => ({
   backgroundColor: '#FCC419',
   color: '#343A40',
@@ -20,18 +19,29 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
   },
 }));
 
-// Propsの型定義
 type CustomYellowButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
+  sx?: ButtonProps['sx'];
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
 };
 
 export default function CustomYellowButton({
   children,
   onClick,
+  sx,
+  startIcon,
+  endIcon,
 }: CustomYellowButtonProps) {
   return (
-    <StyledButton variant="contained" onClick={onClick}>
+    <StyledButton
+      variant="contained"
+      onClick={onClick}
+      sx={sx}
+      startIcon={startIcon}
+      endIcon={endIcon}
+    >
       {children}
     </StyledButton>
   );

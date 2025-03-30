@@ -1,10 +1,17 @@
 import Image from 'next/image';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import CustomYellowButton from '@/components/button/CustomYellowButton';
+import CustomGrayButton from '@/components/button/CustomGrayButton';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+
+
+
 
 export default function Page() {
   return (
     <Box sx={{ width: '100%', height: '400px', position: 'relative' }}>
-      {/* グレーBoxに画像を敷き詰める */}
+      {/* 背景画像（丸く切り抜き） */}
       <Box
         sx={{
           width: '100%',
@@ -23,6 +30,38 @@ export default function Page() {
             objectFit: 'cover',
           }}
         />
+
+        {/* 重ねる要素 */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '24px',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* Yellow Button */}
+          <CustomYellowButton sx={{ width: '80%', height: '48px', padding: '16px 24px' ,mb: 2}}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <PlaceOutlinedIcon sx={{ fontSize: 32 }} />
+              <Typography sx={{ fontSize: '0.8rem', fontWeight: 600 }}>
+                いますぐ予約する
+              </Typography>
+            </Box>
+          </CustomYellowButton>
+
+          {/* Gray Button */}
+          <CustomGrayButton sx={{ width: '60%', height: '48px', padding: '16px 24px' ,mb: 2}}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CalendarMonthIcon sx={{ fontSize: 32 }} />
+              <Typography sx={{ fontSize: '0.6rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                日時を指定して予約
+              </Typography>
+            </Box>
+          </CustomGrayButton>
+        </Box>
       </Box>
     </Box>
   );

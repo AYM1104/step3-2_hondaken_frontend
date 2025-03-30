@@ -1,28 +1,29 @@
-'use client';
-
-import { Button, Typography } from '@mui/material';
-// import CustomYellowButton from '@/compornents/button/CustomYellowButton';
-import CustomGrayButton from '@/compornents/button/CustomGrayButton';
-import CustomCard from '@/compornents/card/CustomCard';
-
-import CustomYellowButton from '@/compornents/button/CustomYellowButton';
+import Image from 'next/image';
+import { Box } from '@mui/material';
 
 export default function Page() {
   return (
-    <main style={{ padding: 32 }}>
-      <Button variant="contained">Plus Jakarta Sans ボタン</Button>
-      <Typography variant="h6" style={{ marginTop: 16 }}>
-        ABCDEFG 12345 テスト表示
-      </Typography>
-      {/* <CustomYellowButton>黄色いカスタムボタン123</CustomYellowButton> */}
-      <CustomGrayButton>グレーのカスタムボタン123</CustomGrayButton>
-      <CustomCard >
-        <Typography variant="h6">カードの中身です123</Typography>
-      </CustomCard>
-
-
-      <CustomYellowButton>てすと</CustomYellowButton>
-
-    </main>
+    <Box sx={{ width: '100%', height: '400px', position: 'relative' }}>
+      {/* グレーBoxに画像を敷き詰める */}
+      <Box
+        sx={{
+          width: '100%',
+          height: '400px',
+          borderBottomLeftRadius: '100% 35%',
+          borderBottomRightRadius: '100% 35%',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        <Image
+          src="https://images.unsplash.com/photo-1615751072497-5f5169febe17?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjAxN3wwfDF8c2VhcmNofDUwfHxkb2d8ZW58MHx8fHwxNzQzMzA2NDk0fDA&ixlib=rb-4.0.3&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450"
+          alt="Dog"
+          fill
+          style={{
+            objectFit: 'cover',
+          }}
+        />
+      </Box>
+    </Box>
   );
 }

@@ -10,6 +10,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 
+import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
+
 
 const tabLabels = ['今日', '明日'];
 
@@ -18,6 +20,7 @@ export default function NowPage() {
   const [activeTab, setActiveTab] = useState('今日');
   const [startTime, setStartTime] = useState<Dayjs | null>(dayjs('2022-04-17T09:00'));
   const [endTime, setEndTime] = useState<Dayjs | null>(dayjs('2022-04-17T17:00'));
+  const [checked, setChecked] = useState(false);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -76,6 +79,29 @@ export default function NowPage() {
                   <CustomTimePicker label="終了時間" value={endTime} onChange={setEndTime} />
                 </Box>
               </LocalizationProvider>
+            </Box>
+
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
+                オプション
+              </Typography>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between', // ← テキストとチェックボックスを左右に配置
+                  alignItems: 'center',            // ← 上下を中央に揃える
+                  px: 2,
+                  py: 1,
+                }}
+              >
+                <Typography>おやつ</Typography>
+
+                <CustomCheckBox
+                  checked={checked}
+                  onChange={(e) => setChecked(e.target.checked)}
+                />
+              </Box>
             </Box>
           </>
         )}

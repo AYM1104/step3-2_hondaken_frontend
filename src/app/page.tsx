@@ -15,7 +15,7 @@ import { useState } from 'react';
 const tabLabels = ['あずける', 'おむかえ'];
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState('あずける');
 
   return (
     <Box sx={{ width: '100%', height: '400px', position: 'relative' }}>
@@ -83,7 +83,7 @@ export default function Page() {
 
       {/* タブに応じたコンテンツ */}
       <Box sx={{ mt: 4, px: 2 }}>
-        {activeTab === 0 && (
+        {activeTab === 'あずける' && (
           <CustomCardHome
             title="今日の予約"
             storeName="Honda Cars 青山店"
@@ -92,7 +92,7 @@ export default function Page() {
             onClickQRCode={() => alert('QRコードを表示します')}
           />
         )}
-        {activeTab === 1 && <Typography>おむかえ予約の内容をここに表示</Typography>}
+        {activeTab === 'おむかえ' && <Typography>おむかえ予約の内容をここに表示</Typography>}
       </Box>
     </Box>
   );

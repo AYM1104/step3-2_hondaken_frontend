@@ -8,19 +8,22 @@ import CustomCardNow from '@/components/card/CustomCardNow';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
 
 import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
-
+import FacilityDialog from '@/components/dialog/FacilityDialog';
 
 const tabLabels = ['今日', '明日'];
 
 
 export default function NowPage() {
   const [activeTab, setActiveTab] = useState('今日');
-  const [startTime, setStartTime] = useState<Dayjs | null>(dayjs('2022-04-17T09:00'));
-  const [endTime, setEndTime] = useState<Dayjs | null>(dayjs('2022-04-17T17:00'));
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('17:00');
   const [checked, setChecked] = useState(false);
+
+  // ダイアログ用ステート
+  const [openFacilityId, setOpenFacilityId] = useState<string | null>(null)
+  const handleCloseDialog = () => setOpenFacilityId(null)
 
   return (
     <Box sx={{ p: 2 }}>
@@ -52,7 +55,7 @@ export default function NowPage() {
                   duration: '5m',
                   isSelected: true,
                   onSelect: () => alert('選択1'),
-                  onDetail: () => alert('詳細1'),
+                  onDetail: () => setOpenFacilityId('1'), // ← モーダル表示
                 },
                 {
                   id: '2',
@@ -108,6 +111,14 @@ export default function NowPage() {
 
         {activeTab === '明日' && <Typography>おむかえ予約の内容をここに表示</Typography>}
       </Box>
+      {/* ダイアログ表示部分 */}
+      {openFacilityId && (
+        <FacilityDialog
+          open={!!openFacilityId}
+          onClose={handleCloseDialog}
+          facilityId={openFacilityId}
+        />
+      )}
     </Box>
   );
 }

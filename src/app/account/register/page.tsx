@@ -70,41 +70,41 @@ export default function RegisterPage() {
 // ユーザー情報を保存するための状態（State）
 const [userData, setUserData] = useState<FormData | null>(null);
 
+const userId = 1;  // ここでuserIdを1に指定
+
 // ユーザー情報をAPIから取得
 useEffect(() => {
-const fetchUserData = async () => {
-  const userId = 1;  // ユーザーIDを適切に設定（例えば、ログインしているユーザーのID）
-
-  try {
-    const res = await fetch(`https://app-002-step3-2-py-oshima8.azurewebsites.net/${userId}`);
-    if (res.ok) {
-      const data = await res.json();  // ユーザー情報を取得
-
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/users/${userId}`);
+      if (!response.ok) {
+        throw new Error('User not found');
+      }
+      const data = await response.json();
+      setUserData(data);
+      console.log('Fetched user data:', data);
+      // 生年月日をYYYY-MM-DD形式に変換
+      const formattedBirthday = new Date(data.birthday).toLocaleDateString('en-CA');
       // 取得したデータをフォームにセット
-      setUserData(data);  // 取得したユーザー情報を状態にセット
       setValue('name_last', data.name_last);
       setValue('name_first', data.name_first);
       setValue('gender', data.gender);
-      setValue('birthday', data.birthday);
+      setValue('birthday', formattedBirthday);
       setValue('postal_code', data.postal_code);
       setValue('prefecture', data.prefecture);
       setValue('city', data.city);
       setValue('address_line', data.address_line);
       setValue('phone_number', data.phone_number);
       setValue('email', data.email);
-    } else {
-      console.error('Error fetching data:', res.status, await res.text()); // レスポンスの詳細をログに出力
-      alert('ユーザー情報の取得に失敗しました');
+    } catch (error) {
+      console.error('エラーが発生しました:', error);
+      alert('ユーザー情報の取得中にエラーが発生しました');
     }
-  } catch (error) {
-    console.error('エラーが発生しました:', error);
-    alert('ユーザー情報の取得中にエラーが発生しました');
-  }
-};
+  };
 
-fetchUserData();
-}, [setValue]);  // setValue が変更される度に実行
-
+  fetchUserData();
+}, [userId]);
+ 
 
 
 
@@ -174,6 +174,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('name_last')}
+            value={userData?.name_last || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.name_last}
             helperText={errors.name_last?.message}
           />
@@ -184,6 +185,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('name_first')}
+            value={userData?.name_first || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.name_first}
             helperText={errors.name_first?.message}
           />
@@ -219,6 +221,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('postal_code')}
+            value={userData?.postal_code || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.postal_code}
             helperText={errors.postal_code?.message}
           />
@@ -245,6 +248,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('city')}
+            value={userData?.city || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.city}
             helperText={errors.city?.message}
           />
@@ -255,6 +259,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('address_line')}
+            value={userData?.address_line || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.address_line}
             helperText={errors.address_line?.message}
           />
@@ -265,6 +270,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('phone_number')}
+            value={userData?.phone_number || ''} // データがあれば表示し、なければ空文字を表示
           />
 
           {/* メールアドレス */}
@@ -273,6 +279,7 @@ fetchUserData();
             fullWidth
             margin="normal"
             {...register('email')}
+            value={userData?.email || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.email}
             helperText={errors.email?.message}
           />

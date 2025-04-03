@@ -26,9 +26,6 @@ import {
   FormControl,
 } from '@mui/material';
 
-
-import { useEffect, useState } from 'react';
-
 // ----------------------
 // 入力のルールをZodで定義
 // ----------------------
@@ -56,58 +53,10 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    setValue,  // setValue を useForm から取得
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-
-
-
-
-
-
-// ユーザー情報を保存するための状態（State）
-const [userData, setUserData] = useState<FormData | null>(null);
-
-const userId = 1;  // ここでuserIdを1に指定
-
-// ユーザー情報をAPIから取得
-useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/users/${userId}`);
-      if (!response.ok) {
-        throw new Error('User not found');
-      }
-      const data = await response.json();
-      setUserData(data);
-      console.log('Fetched user data:', data);
-      // 生年月日をYYYY-MM-DD形式に変換
-      const formattedBirthday = new Date(data.birthday).toLocaleDateString('en-CA');
-      // 取得したデータをフォームにセット
-      setValue('name_last', data.name_last);
-      setValue('name_first', data.name_first);
-      setValue('gender', data.gender);
-      setValue('birthday', formattedBirthday);
-      setValue('postal_code', data.postal_code);
-      setValue('prefecture', data.prefecture);
-      setValue('city', data.city);
-      setValue('address_line', data.address_line);
-      setValue('phone_number', data.phone_number);
-      setValue('email', data.email);
-    } catch (error) {
-      console.error('エラーが発生しました:', error);
-      alert('ユーザー情報の取得中にエラーが発生しました');
-    }
-  };
-
-  fetchUserData();
-}, [userId]);
- 
-
-
-
 
   const onSubmit = async (data: FormData) => {
     const res = await fetch('/api/register', {
@@ -174,7 +123,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('name_last')}
-            value={userData?.name_last || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.name_last}
             helperText={errors.name_last?.message}
           />
@@ -185,7 +133,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('name_first')}
-            value={userData?.name_first || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.name_first}
             helperText={errors.name_first?.message}
           />
@@ -221,7 +168,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('postal_code')}
-            value={userData?.postal_code || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.postal_code}
             helperText={errors.postal_code?.message}
           />
@@ -248,7 +194,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('city')}
-            value={userData?.city || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.city}
             helperText={errors.city?.message}
           />
@@ -259,7 +204,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('address_line')}
-            value={userData?.address_line || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.address_line}
             helperText={errors.address_line?.message}
           />
@@ -270,7 +214,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('phone_number')}
-            value={userData?.phone_number || ''} // データがあれば表示し、なければ空文字を表示
           />
 
           {/* メールアドレス */}
@@ -279,7 +222,6 @@ useEffect(() => {
             fullWidth
             margin="normal"
             {...register('email')}
-            value={userData?.email || ''} // データがあれば表示し、なければ空文字を表示
             error={!!errors.email}
             helperText={errors.email?.message}
           />

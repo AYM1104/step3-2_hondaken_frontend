@@ -26,6 +26,9 @@ import {
   FormControl,
 } from '@mui/material';
 
+
+import { useEffect, useState } from 'react';
+
 // ----------------------
 // 入力のルールをZodで定義
 // ----------------------
@@ -53,10 +56,58 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    setValue,  // setValue を useForm から取得
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+
+
+
+
+
+// ユーザー情報を保存するための状態（State）
+const [userData, setUserData] = useState<FormData | null>(null);
+
+// ユーザー情報をAPIから取得
+useEffect(() => {
+const fetchUserData = async () => {
+  const userId = 1;  // ユーザーIDを適切に設定（例えば、ログインしているユーザーのID）
+
+  try {
+    const res = await fetch(`https://app-002-step3-2-py-oshima8.azurewebsites.net/${userId}`);
+    if (res.ok) {
+      const data = await res.json();  // ユーザー情報を取得
+
+      // 取得したデータをフォームにセット
+      setUserData(data);  // 取得したユーザー情報を状態にセット
+      setValue('name_last', data.name_last);
+      setValue('name_first', data.name_first);
+      setValue('gender', data.gender);
+      setValue('birthday', data.birthday);
+      setValue('postal_code', data.postal_code);
+      setValue('prefecture', data.prefecture);
+      setValue('city', data.city);
+      setValue('address_line', data.address_line);
+      setValue('phone_number', data.phone_number);
+      setValue('email', data.email);
+    } else {
+      console.error('Error fetching data:', res.status, await res.text()); // レスポンスの詳細をログに出力
+      alert('ユーザー情報の取得に失敗しました');
+    }
+  } catch (error) {
+    console.error('エラーが発生しました:', error);
+    alert('ユーザー情報の取得中にエラーが発生しました');
+  }
+};
+
+fetchUserData();
+}, [setValue]);  // setValue が変更される度に実行
+
+
+
+
 
   const onSubmit = async (data: FormData) => {
     const res = await fetch('/api/register', {

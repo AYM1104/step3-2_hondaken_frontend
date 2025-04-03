@@ -22,6 +22,7 @@ export default function CustomTimePicker({ label, value, onChange, sx }: Props) 
         '& .MuiInputBase-root': {
           backgroundColor: '#fff',
           borderRadius: '8px', // 角丸
+          fontSize: '1rem',
         },
         '& .MuiInput-underline:before': {
           borderBottom: '2px solid #ccc', // 下線の色

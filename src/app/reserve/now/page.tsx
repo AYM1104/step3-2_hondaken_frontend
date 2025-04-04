@@ -81,8 +81,8 @@ export default function NowPage() {
   };
 
   const [activeTab, setActiveTab] = useState('今日');
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [checked, setChecked] = useState(false);
 
   // ダイアログ用ステート

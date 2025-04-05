@@ -13,8 +13,8 @@ import BottomNav from '@/components/BottomNav';
 
 export default function SchedulePage() {
   // ✅ 利用時間の状態管理（文字列）
-  const [startTime, setStartTime] = useState<string>('09:00');
-  const [endTime, setEndTime] = useState<string>('17:00');
+  const [startTime, setStartTime] = useState<string>();
+  const [endTime, setEndTime] = useState<string>();
 
   // ✅ モーダル表示制御用の状態管理
   const [openModal, setOpenModal] = useState(false);

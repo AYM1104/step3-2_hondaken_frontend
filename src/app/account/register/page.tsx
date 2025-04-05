@@ -76,7 +76,7 @@ const userId = 1;  // ここでuserIdを1に指定
 useEffect(() => {
   const fetchUserData = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/users/${userId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/${userId}`);
       if (!response.ok) {
         throw new Error('User not found');
       }

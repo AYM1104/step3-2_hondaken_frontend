@@ -19,14 +19,28 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState('あずける');
 
   return (
-    <Box sx={{ width: '100%', height: '400px', position: 'relative' }}>
+    <Box sx={{ width: '100%', position: 'relative' }}>
       {/* 背景画像（丸く切り抜き） */}
       <Box
         sx={{
           width: '100%',
-          height: '400px',
-          borderBottomLeftRadius: '100% 35%',
-          borderBottomRightRadius: '100% 35%',
+          height: {
+            xs: 400,
+            sm: 600,
+            md: 700,
+          },
+          // borderBottomLeftRadius: '100% 35%',
+          // borderBottomRightRadius: '100% 35%',
+          borderBottomLeftRadius: {
+            xs: '100% 35%',
+            sm: '100% 40%',
+            md: '100% 45%',
+          },
+          borderBottomRightRadius: {
+            xs: '100% 35%',
+            sm: '100% 40%',
+            md: '100% 45%',
+          },
           overflow: 'hidden',
           position: 'relative',
         }}
@@ -45,7 +59,11 @@ export default function Page() {
         <Box
           sx={{
             position: 'absolute',
-            top: '260px',
+            top: {
+              xs: '260px',
+              sm: '450px',
+              md: '530px',
+            },
             width: '100%',
             display: 'flex',
             flexDirection: 'column',

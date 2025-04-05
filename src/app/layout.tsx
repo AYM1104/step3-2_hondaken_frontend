@@ -18,8 +18,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'Font Test',
-  description: 'Use Plus Jakarta Sans globally',
+  title: 'ほんだけん',
+  description: 'ディーラーを活用したわんちゃんの一時預かりサービス',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html lang="ja">
         <body className={`${notoSansJP.variable} ${plusJakartaSans.variable}`}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Box
+              sx={{
+                width: {
+                  xs: '100%',
+                  sm: '80%',
+                  md: '60%',
+                },
+                margin: '0 auto',
+              }}
+            >
+              {children}
+            </Box>
+          </Providers>
         </body>
       </html>
     </ClerkProvider>

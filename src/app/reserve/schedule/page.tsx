@@ -12,13 +12,29 @@ import StoreDetailModal from '@/components/modal/StoreDetailModal'; // ✅ モ�
 import BottomNav from '@/components/BottomNav';
 
 export default function SchedulePage() {
+  // 型定義
+  type Store = {
+    name: string;
+    postalCode: string;
+    address: string;
+    imageUrl: string;
+    sizeTags: string[];
+    rating: number;
+    reviewCount: number;
+    features: string[];
+    description: string;
+    price: string;
+  };
+
+
+
   // ✅ 利用時間の状態管理（文字列）
   const [startTime, setStartTime] = useState<string>();
   const [endTime, setEndTime] = useState<string>();
 
   // ✅ モーダル表示制御用の状態管理
   const [openModal, setOpenModal] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<any>(null);
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
   // ✅ 店舗情報データ（仮）
   const stores = [
@@ -64,7 +80,7 @@ export default function SchedulePage() {
   ];
 
   // ✅ モーダルを開く処理
-  const handleOpenModal = (store: any) => {
+  const handleOpenModal = (store: Store) => {
     setSelectedStore(store);
     setOpenModal(true);
   };

@@ -9,7 +9,7 @@ import PetsIcon from '@mui/icons-material/Pets'
 import CustomCard from '@/components/card/CustomCard'
 import CustomYellowButton from '@/components/button/CustomYellowButton'
 
-export default function FacilityDetail({ id }: { id: string }) {
+export default function FacilityDetail({ id: _id }: { id: string }) {
   // TODO: idに応じたデータを取得する（今は仮）
 
   return (

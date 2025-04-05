@@ -36,7 +36,7 @@ export default function BottomNav() {
     setValue(pathname);
   }, [pathname]);
 
-  const handleChange = (_: any, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     if (newValue === 'setting') {
       setDrawerOpen(true); // settingのときはDrawerを開く
     } else {

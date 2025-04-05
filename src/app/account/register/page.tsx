@@ -78,7 +78,8 @@ useEffect(() => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/${userId}`);
       if (!response.ok) {
-        throw new Error('User not found');
+        const text = await response.text();
+        throw new Error(`Fetch failed: ${response.status} - ${text}`);
       }
       const data = await response.json();
       setUserData(data);

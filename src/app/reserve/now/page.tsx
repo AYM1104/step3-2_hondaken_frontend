@@ -18,8 +18,26 @@ import FacilityDialog from '@/components/dialog/FacilityDialog';
 const tabLabels = ['今日', '明日'];
 
 export default function NowPage() {
-  const [items, setItems] = useState<any[]>([]);
-  const [dataLimit, setDataLimit] = useState<number>(2); // 取得するデータ数を設定
+  // 型定義
+  type LocationItem = {
+    id: string;
+    name: string;
+    distance?: string;
+    duration?: string;
+  };
+  
+  type Store = LocationItem & {
+    isSelected: boolean;
+    onSelect: () => void;
+    onDetail: () => void;
+  };
+
+
+
+
+  const [items, setItems] = useState<LocationItem[]>([]);
+  const [stores, setStores] = useState<Store[]>([]);
+  const [dataLimit, _setDataLimit] = useState<number>(2); // 取得するデータ数を設定
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -39,11 +57,8 @@ export default function NowPage() {
   }, [dataLimit]); // dataLimit が変更された場合に再取得
 
  
-  // 店舗情報を格納した配列
-  const [stores, setStores] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchedStores = items.map((item: any) => ({
+    useEffect(() => {
+    const fetchedStores = items.map((item: LocationItem) => ({
       id: item.id,
       name: item.name,
       distance: item.distance || '不明',
@@ -83,7 +98,7 @@ export default function NowPage() {
   const [activeTab, setActiveTab] = useState('今日');
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  const [checked, setChecked] = useState(false);
+  // const [checked, setChecked] = useState(false);
 
   // ダイアログ用ステート
   const [openFacilityId, setOpenFacilityId] = useState<string | null>(null)

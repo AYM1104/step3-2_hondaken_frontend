@@ -8,8 +8,9 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import PetsIcon from '@mui/icons-material/Pets'
 import CustomCard from '@/components/card/CustomCard'
 import CustomYellowButton from '@/components/button/CustomYellowButton'
+import Image from 'next/image';
 
-export default function FacilityDetail({ id: _id }: { id: string }) {
+export default function FacilityDetail() {
   // TODO: idに応じたデータを取得する（今は仮）
 
   return (
@@ -17,7 +18,7 @@ export default function FacilityDetail({ id: _id }: { id: string }) {
         <CustomCard>
         {/* 施設画像 */}
         <Box sx={{ borderRadius: 2, overflow: 'hidden', mb: 2 }}>
-            <img
+            <Image
                 src="https://plus.unsplash.com/premium_photo-1661877049198-e81833f96f6d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjAxN3wwfDF8c2VhcmNofDEwNXx8cGV0JTIwaG90ZWx8ZW58MHx8fHwxNzQzNTIyMTQ1fDA&ixlib=rb-4.0.3&q=85&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450"
                 alt="施設の画像"
                 style={{ width: '100%', height: 'auto', display: 'block' }}

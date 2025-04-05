@@ -37,7 +37,7 @@ export default function NowPage() {
 
   const [items, setItems] = useState<LocationItem[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
-  const [dataLimit, _setDataLimit] = useState<number>(2); // 取得するデータ数を設定
+  const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
 
   useEffect(() => {
     const fetchItems = async () => {

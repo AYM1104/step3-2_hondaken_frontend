@@ -46,7 +46,7 @@ export default function BottomNav() {
 
   return (
     <>
-      // 画面の一番下に固定するための見た目（Paper）を作る
+      {/* 画面の一番下に固定するための見た目（Paper）を作る */}
       <Paper
         sx={{
           position: 'fixed',        // 固定表示にする
@@ -61,9 +61,6 @@ export default function BottomNav() {
         <BottomNavigation
           showLabels                 // ラベル（文字）を常に表示する
           value={value}             // 今選ばれているタブ
-          // onChange={(_, newValue) => {
-          //   router.push(newValue);  // タブがクリックされたらそのページへ移動
-          // }}
           onChange={handleChange}
           sx={{ backgroundColor: 'white' }}
         >

@@ -42,7 +42,7 @@ export default function QRCodePage() {
       >
         {/* 左上の戻るアイコン */}
         <IconButton
-          onClick={() => router.back()}
+          onClick={() => router.push('/mypage')}
           sx={{
             position: 'absolute',
             left: 8,

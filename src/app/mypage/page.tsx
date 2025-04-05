@@ -1,20 +1,21 @@
 'use client';
 
-import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
+
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import CustomGrayButton from '@/components/button/CustomGrayButton';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CustomCardHome from '@/components/card/CustomCardHome';
 import CustomTab from '@/components/tab/CustomTab';
-import { useState } from 'react';
-
-
 
 const tabLabels = ['あずける', 'おむかえ'];
 
 export default function Page() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('あずける');
 
   return (
@@ -40,7 +41,7 @@ export default function Page() {
           }}
         />
 
-        {/* 重ねる要素 */}
+        {/* ボタン2つ */}
         <Box
           sx={{
             position: 'absolute',
@@ -51,8 +52,11 @@ export default function Page() {
             alignItems: 'center',
           }}
         >
-          {/* Yellow Button */}
-          <CustomYellowButton sx={{ width: '80%', height: '48px', padding: '16px 24px' ,mb: 2}}>
+          {/* いますぐ予約する */}
+          <CustomYellowButton
+            sx={{ width: '80%', height: '48px', padding: '16px 24px', mb: 2 }}
+            onClick={() => router.push('/reserve/now')}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <PlaceOutlinedIcon sx={{ fontSize: 32 }} />
               <Typography sx={{ fontSize: '0.8rem', fontWeight: 600 }}>
@@ -61,8 +65,11 @@ export default function Page() {
             </Box>
           </CustomYellowButton>
 
-          {/* Gray Button */}
-          <CustomGrayButton sx={{ width: '60%', height: '48px', padding: '16px 24px' ,mb: 2}}>
+          {/* 日時を指定して予約 */}
+          <CustomGrayButton
+            sx={{ width: '60%', height: '48px', padding: '16px 24px', mb: 2 }}
+            onClick={() => router.push('/reserve/schedule')}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarMonthIcon sx={{ fontSize: 32 }} />
               <Typography sx={{ fontSize: '0.6rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
@@ -72,6 +79,7 @@ export default function Page() {
           </CustomGrayButton>
         </Box>
       </Box>
+
       {/* タブ */}
       <Box sx={{ mt: 4 }}>
         <CustomTab
@@ -81,7 +89,7 @@ export default function Page() {
         />
       </Box>
 
-      {/* タブに応じたコンテンツ */}
+      {/* タブの中身 */}
       <Box sx={{ mt: 4, px: 2 }}>
         {activeTab === 'あずける' && (
           <CustomCardHome

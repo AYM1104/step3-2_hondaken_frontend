@@ -25,7 +25,7 @@ export default function NowPage() {
     const fetchItems = async () => {
       try {
         // API 呼び出しでデータ数を制限（ここでは dataLimit をクエリパラメータとして指定）
-        const response = await axios.get(`http://127.0.0.1:8000/locations?limit=${dataLimit}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations?limit=${dataLimit}`);
         const fetchedItems = response.data;
         // コンソールログでデータを表示
         console.log('取得したデータ:', fetchedItems);

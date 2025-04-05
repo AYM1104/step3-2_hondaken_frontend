@@ -28,6 +28,7 @@ import {
 
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 // ----------------------
 // 入力のルールをZodで定義
@@ -104,7 +105,7 @@ useEffect(() => {
   };
 
   fetchUserData();
-}, [userId]);
+}, [userId, setValue]);
  
 
 
@@ -147,7 +148,7 @@ useEffect(() => {
       >
         {/* ✅ HondaDog ロゴ（中央寄せ） */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <img
+          <Image
             src="/hondadog-logo.png"
             alt="HondaDog"
             style={{

@@ -14,6 +14,9 @@ import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import FacilityDialog from '@/components/dialog/FacilityDialog';
 
+// Store 型をインポートする
+import type { Store } from '@/components/card/CustomCardNow';
+
 
 const tabLabels = ['今日', '明日'];
 
@@ -26,15 +29,6 @@ export default function NowPage() {
     duration?: string;
   };
   
-  type Store = LocationItem & {
-    isSelected: boolean;
-    onSelect: () => void;
-    onDetail: () => void;
-  };
-
-
-
-
   const [items, setItems] = useState<LocationItem[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
   const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
@@ -58,7 +52,7 @@ export default function NowPage() {
 
  
     useEffect(() => {
-    const fetchedStores = items.map((item: LocationItem) => ({
+    const fetchedStores: Store[] = items.map((item: LocationItem) => ({
       id: item.id,
       name: item.name,
       distance: item.distance || '不明',

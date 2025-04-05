@@ -6,7 +6,7 @@ import CustomGrayButton from '../button/CustomGrayButton';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Box, Typography, Stack } from '@mui/material';
 
-type Store = {
+export type Store = {
   id: string;
   name: string;
   distance: string; // 例: "1km"

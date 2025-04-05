@@ -10,6 +10,7 @@ import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import StoreDetailModal from '@/components/modal/StoreDetailModal'; // ✅ モーダルを default import
 import BottomNav from '@/components/BottomNav';
+import Image from 'next/image';
 
 export default function SchedulePage() {
   // 型定義
@@ -29,8 +30,8 @@ export default function SchedulePage() {
 
 
   // ✅ 利用時間の状態管理（文字列）
-  const [startTime, setStartTime] = useState<string>();
-  const [endTime, setEndTime] = useState<string>();
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
 
   // ✅ モーダル表示制御用の状態管理
   const [openModal, setOpenModal] = useState(false);
@@ -96,7 +97,7 @@ export default function SchedulePage() {
       <Box sx={{ p: 3, pb: '100px' }}> {/* ✅ 下部ナビ分の余白 */}
         {/* ✅ ロゴ画像（中央寄せ） */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <img
+          <Image
             src="/hondadog-logo.png"
             alt="HondaDog"
             style={{ height: 50, objectFit: 'contain' }}

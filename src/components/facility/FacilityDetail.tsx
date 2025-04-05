@@ -10,11 +10,19 @@ import CustomCard from '@/components/card/CustomCard'
 import CustomYellowButton from '@/components/button/CustomYellowButton'
 import Image from 'next/image';
 
-export default function FacilityDetail() {
+type Props = {
+    id: string; // ← idを受け取るように
+  }; 
+
+export default function FacilityDetail({ id }: Props) {
   // TODO: idに応じたデータを取得する（今は仮）
 
   return (
     <Box p={2}>
+        {/* デバッグ用にidを表示 */}
+        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+            施設ID: {id}
+        </Typography>
         <CustomCard>
         {/* 施設画像 */}
         <Box sx={{ borderRadius: 2, overflow: 'hidden', mb: 2 }}>

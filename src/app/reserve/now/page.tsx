@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+//　MUIコンポーネント
 import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -28,11 +31,19 @@ export default function NowPage() {
     distance?: string;
     duration?: string;
   };
+
+  // ルーターインスタンスを作成
+  const router = useRouter();
   
   const [items, setItems] = useState<LocationItem[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
   // const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
-  const storeCount = 2;      
+  const storeCount = 2; 
+  
+  // いますぐ予約ボタンをクリックしたときの処理
+  const handleReserveClick = () => {
+    router.push('/reserve/complete');
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -178,7 +189,7 @@ export default function NowPage() {
                 />
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <CustomYellowButton sx={{ height: '48px', padding: '16px 24px' ,mt: 5}}>
+                <CustomYellowButton onClick={handleReserveClick} sx={{ height: '48px', padding: '16px 24px' ,mt: 5}}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Typography sx={{ fontWeight: 600 }}>
                       いますぐ予約する

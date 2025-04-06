@@ -1,4 +1,10 @@
+'use client';
+
 import { useEffect, useState } from 'react';
+// import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+//　MUIコンポーネント
 import { Box, Typography, Stack, Chip } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import StarIcon from '@mui/icons-material/Star';
@@ -6,8 +12,10 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import HotelIcon from '@mui/icons-material/Hotel';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PetsIcon from '@mui/icons-material/Pets';
-import CustomYellowButton from '@/components/button/CustomYellowButton';
-import Image from 'next/image';
+
+//　カスタムコンポーネント
+// import CustomYellowButton from '@/components/button/CustomYellowButton';
+
 
 type Props = {
   id: string;
@@ -25,7 +33,15 @@ type Facility = {
 };
 
 export default function FacilityDetail({ id }: Props) {
+  // ルーターインスタンスを作成
+//   const router = useRouter();
+
   const [facility, setFacility] = useState<Facility | null>(null);
+  
+//   // いますぐ予約ボタンをクリックしたときの処理
+//   const handleReserveClick = () => {
+//     router.push('/reserve/complete');
+//   };
 
   useEffect(() => {
     const fetchFacility = async () => {
@@ -124,11 +140,11 @@ export default function FacilityDetail({ id }: Props) {
                 pr: 1, // 8pxのpadding-right
             }}
             >
-            <CustomYellowButton>
+            {/* <CustomYellowButton onClick={handleReserveClick}>
                 <Typography sx={{ fontSize: '0.6rem', fontWeight: 600 }}>
                 いますぐ予約する
                 </Typography>
-            </CustomYellowButton>
+            </CustomYellowButton> */}
             </Box>
         </Stack>
     </Box>

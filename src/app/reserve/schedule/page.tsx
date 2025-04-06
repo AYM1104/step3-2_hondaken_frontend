@@ -1,16 +1,20 @@
 // ✅ App Router 対応のクライアントコンポーネント宣言
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
+
+// MUIコンポーネント
 import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers';
+
+// カスタムコンポーネント 
 import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import StoreDetailModal from '@/components/modal/StoreDetailModal'; // ✅ モーダルを default import
 import BottomNav from '@/components/BottomNav';
-import Image from 'next/image';
 
 export default function SchedulePage() {
   // 型定義
@@ -26,8 +30,6 @@ export default function SchedulePage() {
     description: string;
     price: string;
   };
-
-
 
   // ✅ 利用時間の状態管理（文字列）
   const [startTime, setStartTime] = useState<string>('');
@@ -100,7 +102,8 @@ export default function SchedulePage() {
           <Image
             src="/hondadog-logo.png"
             alt="HondaDog"
-            style={{ height: 50, objectFit: 'contain' }}
+            width={240}       // ← 必須
+            height={36}       //
           />
         </Box>
 

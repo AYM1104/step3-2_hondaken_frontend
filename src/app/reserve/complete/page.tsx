@@ -4,12 +4,12 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 // import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 // カスタムコンポーネント
 import Header from '@/components/header/header';
 
 export default function ReserveCompletePage() {
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#FCC419' }}>

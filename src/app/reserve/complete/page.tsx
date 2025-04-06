@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+// import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import { useRouter } from 'next/navigation';
+// カスタムコンポーネント
+import Header from '@/components/header/header';
 
 export default function ReserveCompletePage() {
   const router = useRouter();
@@ -12,7 +14,8 @@ export default function ReserveCompletePage() {
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#FCC419' }}>
       {/* ヘッダー */}
-      <Box
+      <Header />
+      {/* <Box
         sx={{
           position: 'relative',
           backgroundColor: 'white',
@@ -22,24 +25,24 @@ export default function ReserveCompletePage() {
           alignItems: 'center',
           justifyContent: 'center',
         }}
-      >
+      > */}
         {/* 家アイコン（左上） */}
-        <IconButton
+        {/* <IconButton
           onClick={() => router.push('/mypage')}
           sx={{ position: 'absolute', left: 8 }}
         >
           <HomeRoundedIcon sx={{ color: '#212529' }} />
-        </IconButton>
+        </IconButton> */}
 
         {/* HondaDogロゴ（センター） */}
-        <Image
+        {/* <Image
           src="/hondadog-logo.png"
           alt="HondaDog"
           width={150}
           height={40}
           style={{ objectFit: 'contain' }}
         />
-      </Box>
+      </Box> */}
 
       {/* 白いカード（中央） */}
       <Box
@@ -58,24 +61,24 @@ export default function ReserveCompletePage() {
           justifyContent: 'center',
           flexDirection: 'column',
 
-          // チケット風の左右の丸窪み
-          '&::before, &::after': {
-            content: '""',
-            position: 'absolute',
-            top: '50%',
-            width: '24px',
-            height: '24px',
-            backgroundColor: '#FCC419',
-            borderRadius: '999px',
-            transform: 'translateY(-50%)',
-            zIndex: 1,
-          },
-          '&::before': {
-            left: '-10px',
-          },
-          '&::after': {
-            right: '-10px',
-          },
+          // // チケット風の左右の丸窪み
+          // '&::before, &::after': {
+          //   content: '""',
+          //   position: 'absolute',
+          //   top: '50%',
+          //   width: '24px',
+          //   height: '24px',
+          //   backgroundColor: '#FCC419',
+          //   borderRadius: '999px',
+          //   transform: 'translateY(-50%)',
+          //   zIndex: 1,
+          // },
+          // '&::before': {
+          //   left: '-10px',
+          // },
+          // '&::after': {
+          //   right: '-10px',
+          // },
         }}
       >
         {/* チケット中央画像＋メッセージ */}

@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 //　カスタムコンポーネント
+import Header from '@/components/header/header'; 
 import CustomTab from '@/components/tab/CustomTab';
 import CustomCardNow from '@/components/card/CustomCardNow';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
@@ -119,10 +120,7 @@ export default function NowPage() {
 
   return (
     <Box sx={{ p: 2 }}>
-      {/* タイトル */}
-      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-        いますぐ予約する
-      </Typography>
+      <Header />
 
       {/* タブ */}
       <Box sx={{ mt: 4 }}>

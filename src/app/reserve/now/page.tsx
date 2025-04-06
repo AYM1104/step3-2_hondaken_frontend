@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,26 +30,34 @@ export default function NowPage() {
   
   const [items, setItems] = useState<LocationItem[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
-  const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
+  // const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
+  const storeCount = 2;      
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // API 呼び出しでデータ数を制限（ここでは dataLimit をクエリパラメータとして指定）
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations?limit=${dataLimit}`);
-        const fetchedItems = response.data;
-        // コンソールログでデータを表示
-        console.log('取得したデータ:', fetchedItems);
-        // 取得したデータを状態にセット
-        setItems(fetchedItems);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/?skip=0&limit=${storeCount}`);
+        if (!response.ok) {
+          throw new Error(`Fetch failed: ${response.status}`);
+        }
+  
+        const data = await response.json();
+  
+        if (!Array.isArray(data)) {
+          console.error("配列ではないデータが返ってきました:", data);
+          return;
+        }
+  
+        setItems(data);
+        console.log("取得したitems:", data);
       } catch (error) {
-        console.error('データ取得に失敗しました:', error);
+        console.error("店舗情報の取得に失敗しました:", error);
       }
     };
-    fetchItems(); // コンポーネントがマウントされた時にデータを取得
-  }, [dataLimit]); // dataLimit が変更された場合に再取得
+  
+    fetchItems();
+  }, [storeCount]);
 
- 
     useEffect(() => {
     const fetchedStores: Store[] = items.map((item: LocationItem) => ({
       id: item.id,
@@ -92,7 +99,7 @@ export default function NowPage() {
   const [activeTab, setActiveTab] = useState('今日');
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  // const [checked, setChecked] = useState(false);
+  // // const [checked, setChecked] = useState(false);
 
   // ダイアログ用ステート
   const [openFacilityId, setOpenFacilityId] = useState<string | null>(null)

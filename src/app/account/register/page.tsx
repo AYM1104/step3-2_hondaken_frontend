@@ -63,11 +63,6 @@ export default function RegisterPage() {
     resolver: zodResolver(schema),
   });
 
-
-
-
-
-
 // ユーザー情報を保存するための状態（State）
 const [userData, setUserData] = useState<FormData | null>(null);
 
@@ -148,14 +143,14 @@ useEffect(() => {
       >
         {/* ✅ HondaDog ロゴ（中央寄せ） */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <Image
-            src="/hondadog-logo.png"
-            alt="HondaDog"
-            style={{
-              height: 50,
-              objectFit: 'contain',
-            }}
-          />
+          <Box sx={{ position: 'relative', width: 160, height: 44 }}>
+            <Image
+              src="/hondadog-logo.png"
+              alt="HondaDog"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </Box>
         </Box>
 
         {/* タイトル */}

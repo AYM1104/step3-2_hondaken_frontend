@@ -13,6 +13,7 @@ import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import FacilityDialog from '@/components/dialog/FacilityDialog';
 
+
 // Store 型をインポートする
 import type { Store } from '@/components/card/CustomCardNow';
 
@@ -66,7 +67,7 @@ export default function NowPage() {
       duration: item.duration || '不明',
       isSelected: false,
       onSelect: () => handleSelect(item.id),
-      onDetail: () => alert(`${item.name}の詳細`),
+      onDetail: () => setOpenFacilityId(item.id),
     }));
     setStores(fetchedStores);
   }, [items]);

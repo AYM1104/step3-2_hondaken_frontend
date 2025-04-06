@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 
+//　カスタムコンポーネント
+import Header from '@/components/header/header'; 
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import CustomGrayButton from '@/components/button/CustomGrayButton';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
@@ -82,7 +84,8 @@ export default function Page() {
 
   return (
     <Box sx={{ width: '100%', position: 'relative' }}>
-      {/* 上部背景画像 */}
+      <Header />
+      {/* 背景画像（丸く切り抜き） */}
       <Box
         sx={{
           width: '100%',

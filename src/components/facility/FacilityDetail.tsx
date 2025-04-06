@@ -1,100 +1,152 @@
-// components/facility/FacilityDetail.tsx
-import { Box, Typography, Stack, Chip } from '@mui/material'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import StarIcon from '@mui/icons-material/Star'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import HotelIcon from '@mui/icons-material/Hotel'
-import CameraAltIcon from '@mui/icons-material/CameraAlt'
-import PetsIcon from '@mui/icons-material/Pets'
-import CustomCard from '@/components/card/CustomCard'
-import CustomYellowButton from '@/components/button/CustomYellowButton'
+'use client';
+
+import { useEffect, useState } from 'react';
+// import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+//　MUIコンポーネント
+import { Box, Typography, Stack, Chip } from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StarIcon from '@mui/icons-material/Star';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import HotelIcon from '@mui/icons-material/Hotel';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import PetsIcon from '@mui/icons-material/Pets';
+
+//　カスタムコンポーネント
+// import CustomYellowButton from '@/components/button/CustomYellowButton';
+
+
 type Props = {
-    id: string; // ← idを受け取るように
-  }; 
+  id: string;
+};
+
+type Facility = {
+  id: string;
+  name: string;
+  address: string;
+  rating: number;
+  reviewCount: number;
+  imageUrl?: string;
+  description: string;
+  pricePerHour: number;
+};
 
 export default function FacilityDetail({ id }: Props) {
-  // TODO: idに応じたデータを取得する（今は仮）
+  // ルーターインスタンスを作成
+//   const router = useRouter();
+
+  const [facility, setFacility] = useState<Facility | null>(null);
+  
+//   // いますぐ予約ボタンをクリックしたときの処理
+//   const handleReserveClick = () => {
+//     router.push('/reserve/complete');
+//   };
+
+  useEffect(() => {
+    const fetchFacility = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/${id}`);
+        const data = await res.json();
+        setFacility(data);
+      } catch (error) {
+        console.error('施設情報の取得に失敗しました:', error);
+      }
+    };
+
+    fetchFacility();
+  }, [id]);
+
+  if (!facility) {
+    return <Typography>読み込み中...</Typography>;
+  }
 
   return (
-    <Box p={2}>
-        {/* デバッグ用にidを表示 */}
-        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-            施設ID: {id}
-        </Typography>
-        <CustomCard>
+    <Box>
         {/* 施設画像 */}
-        <Box sx={{ borderRadius: 2, overflow: 'hidden', mb: 2 }}>
-            <Image
-                src="https://plus.unsplash.com/premium_photo-1661877049198-e81833f96f6d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjAxN3wwfDF8c2VhcmNofDEwNXx8cGV0JTIwaG90ZWx8ZW58MHx8fHwxNzQzNTIyMTQ1fDA&ixlib=rb-4.0.3&q=85&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450"
-                alt="施設の画像"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
+        <Box   
+          sx={{
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+            borderBottomLeftRadius: 24, // 左下だけ角丸
+            borderBottomRightRadius: 24, // 右下だけ角丸
+            overflow: 'hidden',
+            mb: 2,
+        }}
+        >
+          <Image
+            src={facility.imageUrl || '/Hondadealer.png'}
+            alt="店舗の画像"
+            width={800}
+            height={450}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
         </Box>
 
         {/* 犬のサイズチップ */}
         <Stack direction="row" spacing={1} mb={1}>
-            <Chip label="小型犬" />
-            <Chip label="中型犬" />
-            <Chip label="大型犬" />
+          <Chip label="小型犬" />
+          <Chip label="中型犬" />
+          <Chip label="大型犬" />
         </Stack>
 
         {/* 店舗名・場所・評価 */}
         <Typography sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-            Honda Cars 埼玉 草加店
+          {facility.name}
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1}>
-            <LocationOnIcon fontSize="small" />
-            <Typography sx={{ fontSize: '0.6rem' }}>埼玉県草加市</Typography>
-            <StarIcon sx={{ color: '#FCC419', ml: 1 }} />
-            <Typography sx={{ fontSize: '0.6rem' }}>4.5 (999 レビュー)</Typography>
+          <LocationOnIcon fontSize="small" />
+          <Typography sx={{ fontSize: '0.6rem' }}>{facility.address}</Typography>
+          <StarIcon sx={{ color: '#FCC419', ml: 1 }} />
+          <Typography sx={{ fontSize: '0.6rem' }}>
+            {facility.rating} ({facility.reviewCount} レビュー)
+          </Typography>
         </Stack>
 
         {/* Facilities */}
-        <Typography sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-            Facilities
-        </Typography>
-        <Stack direction="row" spacing={4} mt={2} justifyContent="center">
-        <Box display="flex" flexDirection="column" alignItems="center">
-            <AccessTimeIcon fontSize="large" />
+        <Typography sx={{ fontSize: '1rem', fontWeight: 'bold', ml: 1}}>Facilities</Typography>
+        <Stack direction="row" spacing={4} mt={2} justifyContent="center" sx={{ px: 2 }}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <AccessTimeIcon fontSize="medium" />
             <Typography sx={{ fontSize: '0.5rem', mt: 0.5 }}>一時預かり</Typography>
-        </Box>
-        <Box display="flex" flexDirection="column" alignItems="center">
-            <HotelIcon fontSize="large" />
+          </Box>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <HotelIcon fontSize="medium" />
             <Typography sx={{ fontSize: '0.5rem', mt: 0.5 }}>宿泊</Typography>
-        </Box>
-        <Box display="flex" flexDirection="column" alignItems="center">
-            <CameraAltIcon fontSize="large" />
+          </Box>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <CameraAltIcon fontSize="medium" />
             <Typography sx={{ fontSize: '0.5rem', mt: 0.5 }}>カメラ見守り</Typography>
-        </Box>
-        <Box display="flex" flexDirection="column" alignItems="center">
-            <PetsIcon fontSize="large" />
+          </Box>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <PetsIcon fontSize="medium" />
             <Typography sx={{ fontSize: '0.5rem', mt: 0.5 }}>ドッグラン</Typography>
-        </Box>
+          </Box>
         </Stack>
 
         {/* Description */}
-        <Typography mt={3} fontWeight="bold">
-            Description
-        </Typography>
-        <Typography sx={{ fontSize: '0.6rem' }}>
-            冷暖房完備の個室、スタッフによる見守り、広々ドッグランなど、
-            わんちゃんがリラックスして過ごせる環境を整えています。
-        </Typography>
+        <Typography sx={{ fontSize: '1rem', fontWeight: 'bold', ml: 1}}>Description</Typography>
+        <Typography sx={{ fontSize: '0.6rem' }}>{facility.description}</Typography>
 
         {/* 価格とボタン */}
         <Stack direction="row" alignItems="center" justifyContent="space-between" mt={4}>
-            <Typography sx={{ fontSize: '0.6rem' }}>価格 ¥500 / 時間</Typography>
-            <Box width={160}>
-            <CustomYellowButton>
+          <Typography sx={{ fontSize: '0.6rem', ml: 1 }}>
+            価格 ¥{facility.pricePerHour} / 時間
+          </Typography>
+          <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                pr: 1, // 8pxのpadding-right
+            }}
+            >
+            {/* <CustomYellowButton onClick={handleReserveClick}>
                 <Typography sx={{ fontSize: '0.6rem', fontWeight: 600 }}>
-                    いますぐ予約する
+                いますぐ予約する
                 </Typography>
-            </CustomYellowButton>
+            </CustomYellowButton> */}
             </Box>
         </Stack>
-        </CustomCard>
     </Box>
-  )
+  );
 }

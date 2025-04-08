@@ -47,7 +47,7 @@ export default function LoginPage() {
   // ログイン時の処理
   const handleLogin = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

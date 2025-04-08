@@ -75,7 +75,7 @@ export default function FacilityDetail({ id }: Props) {
         }}
         >
           <Image
-            src={facility.imageUrl || '/Hondadealer.png'}
+            src={facility.imageUrl || '/Honda-dealer.png'}
             alt="店舗の画像"
             width={800}
             height={450}

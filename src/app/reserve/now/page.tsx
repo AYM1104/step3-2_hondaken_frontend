@@ -2,30 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-//　MUIコンポーネント
 import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-//　カスタムコンポーネント
-import Header from '@/components/header/header'; 
+import Header from '@/components/header/header';
 import CustomTab from '@/components/tab/CustomTab';
 import CustomCardNow from '@/components/card/CustomCardNow';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import FacilityDialog from '@/components/dialog/FacilityDialog';
+import BottomNav from '@/components/BottomNav';
 
-
-// Store 型をインポートする
 import type { Store } from '@/components/card/CustomCardNow';
-
 
 const tabLabels = ['今日', '明日'];
 
 export default function NowPage() {
-  // 型定義
+  const router = useRouter();
+
   type LocationItem = {
     id: string;
     name: string;
@@ -33,46 +29,54 @@ export default function NowPage() {
     duration?: string;
   };
 
-  // ルーターインスタンスを作成
-  const router = useRouter();
-  
   const [items, setItems] = useState<LocationItem[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
-  // const [dataLimit] = useState<number>(2); // 取得するデータ数を設定
-  const storeCount = 2; 
-  
-  // いますぐ予約ボタンをクリックしたときの処理
-  const handleReserveClick = () => {
-    router.push('/reserve/complete');
+  const [openFacilityId, setOpenFacilityId] = useState<string | null>(null);
+  const [checkedItems, setCheckedItems] = useState({
+    snacks: false,
+    walk: false,
+    medicine: false,
+  });
+  const [activeTab, setActiveTab] = useState('今日');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
+  const storeCount = 2;
+
+  const handleSelect = (id: string) => {
+    setStores((prev) =>
+      prev.map((store) =>
+        store.id === id ? { ...store, isSelected: !store.isSelected } : store
+      )
+    );
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, item: string) => {
+    setCheckedItems((prev) => ({
+      ...prev,
+      [item]: event.target.checked,
+    }));
+  };
+
+  const handleCloseDialog = () => setOpenFacilityId(null);
+
+  // 店舗データを取得
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/?skip=0&limit=${storeCount}`);
-        if (!response.ok) {
-          throw new Error(`Fetch failed: ${response.status}`);
-        }
-  
-        const data = await response.json();
-  
-        if (!Array.isArray(data)) {
-          console.error("配列ではないデータが返ってきました:", data);
-          return;
-        }
-  
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/?skip=0&limit=${storeCount}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('店舗データが配列ではありません');
         setItems(data);
-        console.log("取得したitems:", data);
-      } catch (error) {
-        console.error("店舗情報の取得に失敗しました:", error);
+      } catch (err) {
+        console.error('店舗取得エラー:', err);
       }
     };
-  
     fetchItems();
   }, [storeCount]);
 
-    useEffect(() => {
-    const fetchedStores: Store[] = items.map((item: LocationItem) => ({
+  // 店舗データをStore形式に整形
+  useEffect(() => {
+    const formatted = items.map((item) => ({
       id: item.id,
       name: item.name,
       distance: item.distance || '不明',
@@ -81,134 +85,105 @@ export default function NowPage() {
       onSelect: () => handleSelect(item.id),
       onDetail: () => setOpenFacilityId(item.id),
     }));
-    setStores(fetchedStores);
+    setStores(formatted);
   }, [items]);
 
-  // チェックボックスの状態を管理
-  const [checkedItems, setCheckedItems] = useState({
-    snacks: false,
-    walk: false,
-    medicine: false,
-  });
+  // ✅ JST時間で予約を送信
+  const handleReserveClick = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return alert('ログインしていません');
 
-  // 店舗選択状態を切り替える関数
-  const handleSelect = (id: string) => {
-    setStores((prevStores) =>
-      prevStores.map((store) =>
-        store.id === id
-          ? { ...store, isSelected: !store.isSelected } // 選択状態を切り替え
-          : store
-      )
-    );
+    const selected = stores.find((s) => s.isSelected);
+    if (!selected) return alert('店舗を選択してください');
+    if (!startTime || !endTime) return alert('時間を指定してください');
+
+    // JSTの現在日付を取得
+    const jst = new Date();
+    jst.setHours(jst.getHours() + 9); // UTC→JST補正
+    const todayStr = jst.toISOString().split('T')[0];
+
+    // JSTの時間として予約送信
+    const scheduled_start_time = `${todayStr}T${startTime}:00+09:00`;
+    const scheduled_end_time = `${todayStr}T${endTime}:00+09:00`;
+
+    const payload = {
+      location_id: selected.id,
+      scheduled_start_time,
+      scheduled_end_time,
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}reservations/me`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorMsg = await res.text();
+        console.error('予約登録失敗:', errorMsg);
+        alert('予約登録に失敗しました');
+        return;
+      }
+
+      alert('予約完了！');
+      router.push('/reserve/complete');
+    } catch (err) {
+      console.error('通信エラー:', err);
+      alert('通信エラーが発生しました');
+    }
   };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, item: string) => {
-    setCheckedItems({
-      ...checkedItems,
-      [item]: event.target.checked,
-    });
-  };
-
-  const [activeTab, setActiveTab] = useState('今日');
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<string>("");
-  // // const [checked, setChecked] = useState(false);
-
-  // ダイアログ用ステート
-  const [openFacilityId, setOpenFacilityId] = useState<string | null>(null)
-  const handleCloseDialog = () => setOpenFacilityId(null)
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Header />
+    <>
+      <Box sx={{ p: 2, paddingBottom: '80px' }}>
+        <Header />
+        <Box sx={{ mt: 4 }}>
+          <CustomTab tabs={tabLabels} activeTab={activeTab} onChange={setActiveTab} />
+        </Box>
 
-      {/* タブ */}
-      <Box sx={{ mt: 4 }}>
-        <CustomTab
-          tabs={tabLabels}
-          activeTab={activeTab}
-          onChange={(newIndex) => setActiveTab(newIndex)}
-        />
-      </Box>
+        <Box sx={{ mt: 4, px: 2 }}>
+          {activeTab === '今日' && (
+            <>
+              <CustomCardNow title="店舗一覧" stores={stores} />
 
-      {/* タブに応じたコンテンツ */}
-      <Box sx={{ mt: 4, px: 2 }}>
-        {activeTab === '今日' && (
-          <>
-            {/* 店舗一覧 */}
-            <CustomCardNow title="店舗一覧" stores={stores} />
-
-            {/* 利用時間 */}
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>
-                利用時間
-              </Typography>
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <CustomTimePicker value={startTime} onChange={setStartTime} />
-                  <Typography>〜</Typography>
-                  <CustomTimePicker value={endTime} onChange={setEndTime} />
-                </Box>
-              </LocalizationProvider>
-            </Box>
-
-            {/* オプション */}
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>
-                オプション
-              </Typography>
-
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between',        alignItems: 'center' }}
-              >
-                <Typography>おやつ</Typography>
-                <CustomCheckBox
-                  checked={checkedItems.snacks}
-                  onChange={(e) => handleChange(e, 'snacks')}
-                />
-              </Box>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between',        alignItems: 'center' }}
-              >
-                <Typography>おさんぽ</Typography>
-                <CustomCheckBox
-                  checked={checkedItems.walk}
-                  onChange={(e) => handleChange(e, 'walk')}
-                />
-              </Box>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between',        alignItems: 'center' }}
-              >
-                <Typography>おくすり</Typography>
-                <CustomCheckBox
-                  checked={checkedItems.medicine}
-                  onChange={(e) => handleChange(e, 'medicine')}
-                />
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <CustomYellowButton onClick={handleReserveClick} sx={{ height: '48px', padding: '16px 24px' ,mt: 5}}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography sx={{ fontWeight: 600 }}>
-                      いますぐ予約する
-                    </Typography>
+              <Box sx={{ mt: 4 }}>
+                <Typography fontWeight="bold" fontSize="0.8rem" mb={1}>
+                  利用時間
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <CustomTimePicker value={startTime} onChange={setStartTime} />
+                    <Typography>〜</Typography>
+                    <CustomTimePicker value={endTime} onChange={setEndTime} />
                   </Box>
+                </LocalizationProvider>
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+                <CustomYellowButton onClick={handleReserveClick} sx={{ height: '48px', px: 4 }}>
+                  <Typography fontWeight={600}>いますぐ予約する</Typography>
                 </CustomYellowButton>
               </Box>
-            </Box>
-          </>
-        )}
+            </>
+          )}
 
-        {activeTab === '明日' && <Typography>おむかえ予約の内容をここに表示</Typography>}
+          {activeTab === '明日' && <Typography>おむかえ予約の内容をここに表示</Typography>}
+        </Box>
+
+        {openFacilityId && (
+          <FacilityDialog
+            open={!!openFacilityId}
+            onClose={handleCloseDialog}
+            facilityId={openFacilityId}
+          />
+        )}
       </Box>
-      {/* ダイアログ表示部分 */}
-      {openFacilityId && (
-        <FacilityDialog
-          open={!!openFacilityId}
-          onClose={handleCloseDialog}
-          facilityId={openFacilityId}
-        />
-      )}
-    </Box>
+
+      <BottomNav />
+    </>
   );
 }

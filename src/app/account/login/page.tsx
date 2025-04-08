@@ -43,7 +43,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
 
   const router = useRouter();
-  
+
   // ログイン時の処理
   const handleLogin = async () => {
     try {
@@ -54,15 +54,17 @@ export default function LoginPage() {
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       if (!res.ok) throw new Error('ログイン失敗');
-  
+
       const data = await res.json();
       console.log('ログイン成功', data);
-  
-      // ログイン成功後に /mypage へ遷移
+
+      // ✅ JWTトークン保存
+      localStorage.setItem('access_token', data.access_token);
+
+      // ✅ マイページへ遷移
       router.push('/mypage');
-  
     } catch (error) {
       console.error('ログインエラー:', error);
       alert('ログインに失敗しました');
@@ -131,14 +133,23 @@ export default function LoginPage() {
             />
           </FormControl>
 
-          {/* ボタン */}
+          {/* ログインボタン + 新規登録ボタン */}
           <Box mt={3}>
-          <CustomYellowButton
-            onClick={handleLogin}
-            sx={{ width: '100%' }}
-          >
-            login
-          </CustomYellowButton>
+            <CustomYellowButton
+              onClick={handleLogin}
+              sx={{ width: '100%' }}
+            >
+              login
+            </CustomYellowButton>
+
+            <Box mt={2}>
+              <CustomYellowButton
+                onClick={() => router.push('/account/register')}
+                sx={{ width: '100%' }}
+              >
+                新規登録
+              </CustomYellowButton>
+            </Box>
           </Box>
 
           {/* 区切り線と文字 */}
@@ -158,4 +169,3 @@ export default function LoginPage() {
     </Box>
   );
 }
-

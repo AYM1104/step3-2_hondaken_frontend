@@ -88,9 +88,38 @@ export default function DogRegisterPage() {
     const transformed = {
       ...data,
       weight: parseFloat(data.weight),
+      birthday: data.birthday ? new Date(data.birthday).toISOString() : null,
     };
-    console.log('送信データ:', transformed);
-    alert('登録完了！（画像は後で送信処理追加可）');
+
+    // ✅ JWTトークンを取得
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      alert('ログインしていません');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}dogs/me`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(transformed),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('登録失敗:', errorText);
+        alert('登録に失敗しました');
+        return;
+      }
+
+      alert('登録完了！');
+    } catch (err) {
+      console.error('通信エラー:', err);
+      alert('通信エラーが発生しました');
+    }
   };
 
   return (

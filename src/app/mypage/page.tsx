@@ -22,10 +22,6 @@ type Reservation = {
   check_out_time: string;
 };
 
-type Location = {
-  name: string;
-};
-
 export default function Page() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('あずける');

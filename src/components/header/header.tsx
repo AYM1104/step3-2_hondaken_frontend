@@ -9,7 +9,7 @@ export default function Header() {
       <Toolbar sx={{ justifyContent: 'center' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Image
-            src="/hondadog-logo.png"
+            src="/HondaDog_logo1.png"
             alt="Honda Dog ロゴ"
             width={240}  // サイズは必要に応じて調整してね
             height={36}

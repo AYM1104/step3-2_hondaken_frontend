@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 
+//　カスタムコンポーネント
 import Header from '@/components/header/header';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import CustomGrayButton from '@/components/button/CustomGrayButton';
@@ -16,6 +17,7 @@ import BottomNav from '@/components/BottomNav';
 
 const tabLabels = ['あずける', 'おむかえ'];
 
+// 予約データの型定義
 type Reservation = {
   location_id: number;
   check_in_time: string;
@@ -25,56 +27,91 @@ type Reservation = {
 export default function Page() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('あずける');
+  // もっちゃん追加
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [locationMap, setLocationMap] = useState<Record<number, string>>({});
 
+  // JWTトークンを取得する関数
+  const getToken = () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.warn('🔑 トークンが見つかりません。ログインが必要です');
+      return null;
+    }
+    return token;
+  };
+
+  // 予約情報を取得する関数
+  const getUpcomingReservations = async (token: string): Promise<Reservation[]> => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}reservations/me/upcoming`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    // 取得に失敗した場合
+    if (!res.ok) throw new Error('❌ 予約取得に失敗しました');
+    // 取得できたらJSON形式で返す
+    return res.json();
+  };
+
+  // 予約情報から一意の店舗IDを取得する関数
+  const uniqueLocationIds = (reservations: Reservation[]): number[] => {
+    return Array.from(new Set(reservations.map((r) => r.location_id)));
+  };
+
+  // 店舗IDから店舗名を取得する関数
+  const fetchLocationName = async (id: number, token: string): Promise<{ id: number; name: string }> => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  
+    const data = await res.json();
+    return { id, name: data.name };
+  }; 
+
+  // 店舗ID → 店舗名の マップ（Map） を作る関数
+  const getLocationMap = async (reservations: Reservation[], token: string): Promise<Record<number, string>> => {
+    // ユニークな店舗ID一覧を取得
+    const ids = uniqueLocationIds(reservations);
+  
+    // 各IDに対して fetchLocationName を呼び出して、全件Promise化
+    const locationPromises = ids.map((id) => fetchLocationName(id, token));
+  
+    // 全部のfetchが終わるまで待つ
+    const locations = await Promise.all(locationPromises);
+  
+    // Mapに変換
+    const map: Record<number, string> = {};
+    locations.forEach(({ id, name }) => {
+      map[id] = name;
+    });
+  
+    return map;
+  };
+
+
+
+  // もっちゃん追加
   useEffect(() => {
-    const fetchReservations = async () => {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        console.warn('🔑 JWTが存在しません。ログインしてください');
-        return;
-      }
-
+    const fetchData = async () => {
+      const token = getToken(); // JWTトークン取得
+      // const token = localStorage.getItem('access_token');
+      // console.log('トークンの期限切れチェックをスキップ（仮）');
+      if (!token) return;
+  
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_ENDPOINT}reservations/me/upcoming`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) {
-          console.error('❌ 予約取得に失敗しました', res.statusText);
-          return;
-        }
-
-        const data: Reservation[] = await res.json();
-        setReservations(data);
-
-        const uniqueLocationIds = Array.from(new Set(data.map((r) => r.location_id)));
-        const locationPromises = uniqueLocationIds.map((id) =>
-          fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }).then((res) => res.json().then((data) => ({ id, name: data.name })))
-        );
-
-        const locations = await Promise.all(locationPromises);
-        const map: Record<number, string> = {};
-        locations.forEach(({ id, name }) => {
-          map[id] = name;
-        });
-        setLocationMap(map);
+        const reservations = await getUpcomingReservations(token); // 予約データ取得
+        setReservations(reservations);
+  
+        const map = await getLocationMap(reservations, token); // 店舗マップ作成
+        setLocationMap(map); // stateに保存
       } catch (err) {
-        console.error('通信エラー:', err);
+        console.error('📛 エラー:', err);
       }
     };
-
-    fetchReservations();
+  
+    fetchData();
   }, []);
 
+  // もっちゃん追加
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return '';
@@ -85,6 +122,7 @@ export default function Page() {
     });
   };
 
+  // もっちゃん追加
   const formatTime = (start: string, end: string) => {
     const s = new Date(start);
     const e = new Date(end);
@@ -97,7 +135,7 @@ export default function Page() {
       <Box sx={{ width: '100%', position: 'relative', paddingBottom: '80px' }}>
         <Header />
 
-        {/* 背景エリア */}
+        {/* 背景画像 */}
         <Box
           sx={{
             width: '100%',
@@ -115,6 +153,7 @@ export default function Page() {
             style={{ objectFit: 'cover', objectPosition: 'center -130px' }}
           />
 
+          {/* ボタン（いますぐ予約、日時指定） */}
           <Box
             sx={{
               position: 'absolute',
@@ -125,6 +164,7 @@ export default function Page() {
               alignItems: 'center',
             }}
           >
+            {/* いますぐ予約 */}
             <CustomYellowButton
               sx={{ width: '80%', height: '48px', padding: '16px 24px', mb: 2 }}
               onClick={() => router.push('/reserve/now')}
@@ -136,7 +176,8 @@ export default function Page() {
                 </Typography>
               </Box>
             </CustomYellowButton>
-
+            
+            {/* 日時を指定して予約 */}
             <CustomGrayButton
               sx={{ width: '60%', height: '48px', padding: '16px 24px', mb: 2 }}
               onClick={() => router.push('/reserve/schedule')}
@@ -151,7 +192,7 @@ export default function Page() {
           </Box>
         </Box>
 
-        {/* タブ切替 */}
+        {/* タブ */}
         <Box sx={{ mt: 4 }}>
           <CustomTab
             tabs={tabLabels}
@@ -160,9 +201,11 @@ export default function Page() {
           />
         </Box>
 
-        {/* タブ内容 */}
-        <Box sx={{ mt: 4, px: 2 }}>
+        {/* タブの内容 */}
+        {/* <Box sx={{ mt: 4, px: 2 }}> */}
+          {/* もっちゃん追加 */}
           {activeTab === 'あずける' && reservations.length > 0 ? (
+            // 予約が１件以上ある場合
             reservations.map((r, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <CustomCardHome
@@ -175,6 +218,7 @@ export default function Page() {
               </Box>
             ))
           ) : (
+            // まだ予約がない場合
             <Typography sx={{ mt: 2, color: 'text.secondary', textAlign: 'center' }}>
               予約はまだありません
             </Typography>
@@ -183,7 +227,7 @@ export default function Page() {
           {activeTab === 'おむかえ' && (
             <Typography>おむかえ予約の内容をここに表示</Typography>
           )}
-        </Box>
+        {/* </Box> */}
       </Box>
 
       <BottomNav />

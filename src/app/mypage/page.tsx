@@ -135,7 +135,6 @@ export default function Page() {
 
   // レスポンシブの条件を定義
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
   const isSm = useMediaQuery(theme.breakpoints.only('sm'));
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 

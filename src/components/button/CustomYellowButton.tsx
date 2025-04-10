@@ -22,6 +22,7 @@ const StyledButton = styled(Button)<ButtonProps>(() => ({
 
 type CustomYellowButtonProps = {
   children: React.ReactNode;
+  type?: ButtonProps['type'];
   onClick?: () => void;
   sx?: ButtonProps['sx'];
   startIcon?: React.ReactNode;
@@ -30,6 +31,7 @@ type CustomYellowButtonProps = {
 
 export default function CustomYellowButton({
   children,
+  type,
   onClick,
   sx,
   startIcon,
@@ -37,6 +39,7 @@ export default function CustomYellowButton({
 }: CustomYellowButtonProps) {
   return (
     <StyledButton
+      type={type}
       variant="contained"
       onClick={onClick}
       sx={sx}

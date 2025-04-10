@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react'; // ✅ useState, useEffectを追加
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -19,11 +19,13 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PetsIcon from '@mui/icons-material/Pets';
 import { useRouter } from 'next/navigation';
+import { Dayjs } from 'dayjs';
 
 interface StoreDetailModalProps {
   open: boolean;
   onClose: () => void;
   store: {
+    id: number;
     name: string;
     address: string;
     imageUrl: string;
@@ -34,13 +36,22 @@ interface StoreDetailModalProps {
     description: string;
     price: string;
   } | null;
+  startTime: string;
+  endTime: string;
+  selectedDate: Dayjs;
 }
 
-export default function StoreDetailModal({ open, onClose, store }: StoreDetailModalProps) {
+export default function StoreDetailModal({
+  open,
+  onClose,
+  store,
+  startTime,
+  endTime,
+  selectedDate,
+}: StoreDetailModalProps) {
   const router = useRouter();
-  const [visible, setVisible] = useState(false); // ✅ フェード制御
+  const [visible, setVisible] = useState(false);
 
-  // openの変更に合わせて表示切替
   useEffect(() => {
     if (open) {
       setVisible(true);
@@ -48,18 +59,61 @@ export default function StoreDetailModal({ open, onClose, store }: StoreDetailMo
   }, [open]);
 
   const handleClose = () => {
-    setVisible(false); // ✅ 一旦非表示に
+    setVisible(false);
     setTimeout(() => {
-      onClose(); // ✅ アニメーション後に閉じる
-    }, 500); // Fadeと同じ500ms
+      onClose();
+    }, 500);
   };
 
   if (!store) return null;
 
+  const handleReserveClick = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return alert('ログインしていません');
+
+    const year = selectedDate.year();
+    const month = (selectedDate.month() + 1).toString().padStart(2, '0');
+    const day = selectedDate.date().toString().padStart(2, '0');
+    const baseDate = `${year}-${month}-${day}`;
+
+    const scheduled_start_time = `${baseDate}T${startTime}:00+09:00`;
+    const scheduled_end_time = `${baseDate}T${endTime}:00+09:00`;
+
+    const payload = {
+      location_id: store.id,
+      scheduled_start_time,
+      scheduled_end_time,
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}reservations/me`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('予約エラー:', errorText);
+        alert('予約に失敗しました');
+        return;
+      }
+
+      alert('予約が完了しました');
+      router.push('/reserve/complete');
+    } catch (err) {
+      console.error('通信エラー:', err);
+      alert('通信エラーが発生しました');
+    }
+  };
+
   return (
     <Modal
       open={open}
-      onClose={handleClose} // ✅ 修正ポイント
+      onClose={handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
@@ -127,19 +181,11 @@ export default function StoreDetailModal({ open, onClose, store }: StoreDetailMo
             </Typography>
           </Box>
 
-          {/* Facilities */}
+          {/* Facilities セクション */}
           <Typography variant="subtitle1" fontWeight="bold" sx={{ mt: 2 }}>
             Facilities
           </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 1,
-              mb: 2,
-              gap: 2,
-            }}
-          >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, mb: 2, gap: 2 }}>
             {/* 各施設アイコン */}
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <AccessTimeIcon sx={{ fontSize: 36 }} />
@@ -159,13 +205,13 @@ export default function StoreDetailModal({ open, onClose, store }: StoreDetailMo
             </Box>
           </Box>
 
-          {/* 説明 */}
+          {/* 説明セクション */}
           <Typography variant="subtitle1" fontWeight="bold">Description</Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             {store.description}
           </Typography>
 
-          {/* 価格・予約ボタン */}
+          {/* 価格と予約ボタン */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
             <Typography variant="subtitle1" fontWeight="bold">
               価格 {store.price}／時間
@@ -178,7 +224,7 @@ export default function StoreDetailModal({ open, onClose, store }: StoreDetailMo
                 borderRadius: 999,
                 fontWeight: 'bold',
               }}
-              onClick={() => router.push('/reserve/complete')}
+              onClick={handleReserveClick} // ✅ JSTで予約送信
             >
               予約する
             </Button>

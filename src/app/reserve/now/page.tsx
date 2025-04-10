@@ -42,7 +42,49 @@ export default function NowPage() {
   const storeCount = 2; 
   
   // いますぐ予約ボタンをクリックしたときの処理
-  const handleReserveClick = () => {
+  // const handleReserveClick = () => {
+  //   router.push('/reserve/complete');
+  // };
+
+  // 上記を以下に修正（もっちゃん）
+  const handleReserveClick = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return alert('ログインしていません');
+  
+    const selected = stores.find((s) => s.isSelected);
+    if (!selected) return alert('店舗を選択してください');
+    if (!startTime || !endTime) return alert('時間を指定してください');
+  
+    const jst = new Date();
+    jst.setHours(jst.getHours() + 9);
+    const todayStr = jst.toISOString().split('T')[0];
+  
+    const scheduled_start_time = `${todayStr}T${startTime}:00+09:00`;
+    const scheduled_end_time = `${todayStr}T${endTime}:00+09:00`;
+  
+    const payload = {
+      location_id: selected.id,
+      scheduled_start_time,
+      scheduled_end_time,
+    };
+  
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}reservations/me`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  
+    if (!res.ok) {
+      const errorMsg = await res.text();
+      console.error('予約登録失敗:', errorMsg);
+      alert('予約登録に失敗しました');
+      return;
+    }
+  
+    alert('予約完了！');
     router.push('/reserve/complete');
   };
 

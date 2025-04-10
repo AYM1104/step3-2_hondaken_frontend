@@ -31,14 +31,14 @@ const SettingDrawer: React.FC<Props> = ({ open, onClose }) => {
       <div style={{ width: 250, padding: 16 }}>
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push('/user-profile')}>
+            <ListItemButton onClick={() => router.push('/account/register')}>
               <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary="ユーザープロフィール" />
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push('/dog-profile')}>
+            <ListItemButton onClick={() => router.push('/setting')}>
               <ListItemIcon><PetsIcon /></ListItemIcon>
               <ListItemText primary="わんちゃんプロフィール" />
             </ListItemButton>

@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 // ✅ 下部ナビ（BottomNav）を読み込み
-import BottomNav from '@/components/BottomNav';
+import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 // 画面に表示する部品たち（MUI：Material UI）
 import {

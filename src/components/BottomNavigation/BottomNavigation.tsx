@@ -1,6 +1,4 @@
 // app/components/BottomNav.tsx
-
-// 'use client' を書くことで、このファイルは「ブラウザ側（クライアント側）」で動くように指定している
 'use client';
 
 // Material UI（MUI）の部品を読み込んでいる
@@ -62,13 +60,33 @@ export default function BottomNav() {
           showLabels                 // ラベル（文字）を常に表示する
           value={value}             // 今選ばれているタブ
           onChange={handleChange}
-          sx={{ backgroundColor: 'white' }}
+          sx={{ backgroundColor: 'white', height: 64, }}
         >
           {/* ナビゲーションに表示するボタンたち */}
-          <BottomNavigationAction label="home" value="/" icon={<HomeIcon />} />
-          <BottomNavigationAction label="検索" value="/search" icon={<SearchIcon />} />
-          <BottomNavigationAction label="お気に入り" value="/favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="setting" value="setting" icon={<SettingsIcon />} />
+          <BottomNavigationAction
+            label="ホーム"
+            value="/"
+            icon={<HomeIcon />}
+            sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
+          />
+          <BottomNavigationAction
+            label="検索"
+            value="/search"
+            icon={<SearchIcon />}
+            sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
+          />
+          <BottomNavigationAction
+            label="お気に入り"
+            value="/favorites"
+            icon={<FavoriteIcon />}
+            sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
+          />
+          <BottomNavigationAction
+            label="設定"
+            value="setting"
+            icon={<SettingsIcon />}
+            sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
+          />
         </BottomNavigation>
       </Paper>
       {/* setting Drawer */}

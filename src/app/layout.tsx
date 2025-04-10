@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               width: {
                 xs: '100%',
                 sm: '80%',
-                md: '60%',
+                md: '50%',
               },
               margin: '0 auto',
             }}

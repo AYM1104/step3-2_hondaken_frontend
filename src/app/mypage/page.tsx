@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+
+// MUIコンポーネント
+import { useTheme, useMediaQuery } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 //　カスタムコンポーネント
 import Header from '@/components/header/header';
@@ -130,6 +133,17 @@ export default function Page() {
     return `${s.getHours()}:00〜${e.getHours()}:00`;
   };
 
+  // レスポンシブの条件を定義
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+
+  // objectPosition を動的に決定
+  let objectPosition = 'center -130px';
+  if (isSm) objectPosition = 'center -230px';
+  if (isMdUp) objectPosition = 'center -330px';
+
   return (
     <>
       <Box sx={{ width: '100%', position: 'relative', paddingBottom: '80px' }}>
@@ -139,7 +153,7 @@ export default function Page() {
         <Box
           sx={{
             width: '100%',
-            height: { xs: 400, sm: 600, md: 700 },
+            height: { xs: 400, sm: 500, md: 400 },
             borderBottomLeftRadius: { xs: '100% 35%', sm: '100% 40%', md: '100% 45%' },
             borderBottomRightRadius: { xs: '100% 35%', sm: '100% 40%', md: '100% 45%' },
             overflow: 'hidden',
@@ -150,14 +164,14 @@ export default function Page() {
             src="https://images.unsplash.com/photo-1615751072497-5f5169febe17?auto=format&q=80&fit=crop&w=450"
             alt="Dog"
             fill
-            style={{ objectFit: 'cover', objectPosition: 'center -130px' }}
+            style={{ objectFit: 'cover', objectPosition: objectPosition, }}
           />
 
           {/* ボタン（いますぐ予約、日時指定） */}
           <Box
             sx={{
               position: 'absolute',
-              top: { xs: '260px', sm: '450px', md: '530px' },
+              top: { xs: '260px', sm: '350px', md: '260px' },
               width: '100%',
               display: 'flex',
               flexDirection: 'column',

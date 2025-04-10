@@ -17,7 +17,7 @@ import { DateCalendar } from '@mui/x-date-pickers';
 import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import StoreDetailModal from '@/components/modal/StoreDetailModal'; // ✅ モーダルを default import
-import BottomNav from '@/components/BottomNav';
+import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

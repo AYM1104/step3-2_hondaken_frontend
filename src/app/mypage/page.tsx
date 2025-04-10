@@ -13,7 +13,7 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CustomCardHome from '@/components/card/CustomCardHome';
 import CustomTab from '@/components/tab/CustomTab';
-import BottomNav from '@/components/BottomNav';
+import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 const tabLabels = ['あずける', 'おむかえ'];
 

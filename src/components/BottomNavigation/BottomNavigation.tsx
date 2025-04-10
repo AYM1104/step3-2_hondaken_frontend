@@ -22,7 +22,7 @@ import { useRouter, usePathname } from 'next/navigation';
 // Reactの機能：状態（useState）や、変化を感知する（useEffect）を使う
 import { useState, useEffect } from 'react';
 
-import SettingDrawer from './drawer/SettingDrawer'; // ← ここを追記（パスに合わせて調整）
+import SettingDrawer from '../drawer/SettingDrawer'; // ← ここを追記（パスに合わせて調整）
 
 // BottomNavコンポーネントの本体
 export default function BottomNav() {

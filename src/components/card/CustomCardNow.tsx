@@ -7,7 +7,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Box, Typography, Stack } from '@mui/material';
 
 export type Store = {
-  id: string;
+  id: number;
   name: string;
   distance: string; // 例: "1km"
   duration: string; // 例: "5m"

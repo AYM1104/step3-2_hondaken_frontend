@@ -14,3 +14,23 @@ body {
 :lang(ja) {
   font-family: var(--font-noto-sans-jp), var(--font-plus-jakarta), sans-serif;
 }
+
+/* カレンダーの月・年表示のフォントサイズを調整 */
+.MuiPickersCalendarHeader-label {
+  font-size: 1rem !important;
+  font-weight: 500;
+}
+
+.MuiPickersCalendarHeader-switchViewButton .MuiTypography-root {
+  font-size: 1rem !important;
+}
+
+/* 年選択ビューで選択された年（例: 2025）の背景色と文字色を変更 */
+.MuiPickersYear-yearButton.Mui-selected {
+  background-color: #FCC419 !important;
+  color: #212529 !important;
+}
+
+.MuiPickersYear-yearButton.Mui-selected:hover {
+  background-color: #e6b800 !important;
+}

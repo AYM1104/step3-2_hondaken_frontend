@@ -2,7 +2,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -11,12 +10,13 @@ import timezone from 'dayjs/plugin/timezone';
 import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers';
+import { DateCalendar, PickersDay } from '@mui/x-date-pickers';
 
 // カスタムコンポーネント 
+import Header from '@/components/header/header';
 import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
-import StoreDetailModal from '@/components/modal/StoreDetailModal'; // ✅ モーダルを default import
+import StoreDetailModal from '@/components/modal/StoreDetailModal'; // 
 import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 dayjs.extend(utc);
@@ -101,15 +101,35 @@ export default function SchedulePage() {
     <>
       <Box sx={{ p: 3, pb: '100px' }}>
         {/* ロゴ */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <Image src="/hondadog-logo.png" alt="HondaDog" width={240} height={36} />
-        </Box>
+        <Header />
 
         {/* カレンダー */}
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar value={selectedDate} onChange={(newDate) => setSelectedDate(newDate!)} />
-          </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateCalendar
+            value={selectedDate}
+            onChange={(newDate) => setSelectedDate(newDate)}
+            slots={{
+              day: (props) => {
+                const isSelected = dayjs(props.day).isSame(selectedDate, 'day');
+                return (
+                  <PickersDay
+                    {...props}
+                    sx={{
+                      ...(isSelected && {
+                        bgcolor: '#FCC419',
+                        color: 'black',
+                        '&:hover': {
+                          bgcolor: '#e6b800',
+                        },
+                      }),
+                    }}
+                  />
+                );
+              },
+            }}
+          />
+        </LocalizationProvider>
         </Box>
 
         {/* 利用時間選択 */}

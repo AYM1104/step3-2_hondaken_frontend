@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
+// カスタムコンポーネント
 import Header from '@/components/header/header';
 import CustomTab from '@/components/tab/CustomTab';
 import CustomCardNow, { Store as CardStore } from '@/components/card/CustomCardNow';
@@ -14,6 +15,7 @@ import CustomTimePicker from '@/components/time/CustomTimePicker';
 import CustomCheckBox from '@/components/checkbox/CustomCheckBox';
 import CustomYellowButton from '@/components/button/CustomYellowButton';
 import StoreDetailModal from '@/components/modal/StoreDetailModal';
+import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 const tabLabels = ['今日', '明日'];
 
@@ -150,15 +152,17 @@ export default function NowPage_withModal() {
 
   return (
     <Box sx={{ p: 3 }}>
+      {/* ロゴ */}
       <Header />
 
+      {/* タブ */}
       <Box sx={{ mt: 4 }}>
         <CustomTab tabs={tabLabels} activeTab={activeTab} onChange={setActiveTab} />
       </Box>
-
       {activeTab === '今日' && (
         <>
-          {/* 予約可能な店舗 */}
+
+          {/* 店舗一覧 */}
           <Box sx={{ mt: 4 }}>
           <CustomCardNow
             title="店舗一覧"
@@ -238,7 +242,9 @@ export default function NowPage_withModal() {
           selectedDate={dayjs()}
         />
       )}
+      <BottomNav />
     </Box>
+    
   );
 }
 //   // 型定義

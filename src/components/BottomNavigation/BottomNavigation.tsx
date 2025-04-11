@@ -1,28 +1,20 @@
 // app/components/BottomNav.tsx
 'use client';
 
-// Material UI（MUI）の部品を読み込んでいる
-import {
-  BottomNavigation,         // 下のナビゲーションバー
-  BottomNavigationAction,   // ナビゲーションの中の1つ1つのボタン
-  Paper,                    // 見た目に影をつけたりするためのコンポーネント
-} from '@mui/material';
+import { useRouter, usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-// ナビゲーションで使うアイコンたち
+// MUIコンポーネント
+import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-// Next.js の機能で、ページの移動や現在のURLを扱う
-import { useRouter, usePathname } from 'next/navigation';
+// カスタムコンポーネント
+import SettingDrawer from '../drawer/SettingDrawer'; 
 
-// Reactの機能：状態（useState）や、変化を感知する（useEffect）を使う
-import { useState, useEffect } from 'react';
 
-import SettingDrawer from '../drawer/SettingDrawer'; // ← ここを追記（パスに合わせて調整）
-
-// BottomNavコンポーネントの本体
 export default function BottomNav() {
   const router = useRouter();               // ページを移動するための機能
   const pathname = usePathname();           // 今見ているページのURL（パス）
@@ -34,11 +26,16 @@ export default function BottomNav() {
     setValue(pathname);
   }, [pathname]);
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
-    if (newValue === 'setting') {
-      setDrawerOpen(true); // settingのときはDrawerを開く
-    } else {
-      router.push(newValue); // 他のタブはページ遷移
+  // ボトムナビゲーションの選択に応じて処理を分ける関数（「検索」「お気に入り」はページ先が存在しないのでコメントアウト）
+  const handleNavigationChange = (_: React.SyntheticEvent, newValue: string) => {
+    if (newValue === 'home') {
+      router.push('/mypage'); // ホーム
+    // } else if (newValue === 'search') {
+    //   router.push('/search'); // 検索
+    // } else if (newValue === 'favorites') {
+    //   router.push('/favorites'); // お気に入り
+    } else if (newValue === 'setting') {
+      setDrawerOpen(true); // 設定はDrawerを開く
     }
   };
 
@@ -59,28 +56,34 @@ export default function BottomNav() {
         <BottomNavigation
           showLabels                 // ラベル（文字）を常に表示する
           value={value}             // 今選ばれているタブ
-          onChange={handleChange}
+          onChange={handleNavigationChange}
           sx={{ backgroundColor: 'white', height: 64, }}
         >
-          {/* ナビゲーションに表示するボタンたち */}
+          {/* ホーム */}
           <BottomNavigationAction
             label="ホーム"
-            value="/"
+            value="home"
             icon={<HomeIcon />}
             sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
           />
+
+          {/* 検索 */}
           <BottomNavigationAction
             label="検索"
-            value="/search"
+            value="search"
             icon={<SearchIcon />}
             sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
           />
+
+          {/* お気に入り */}
           <BottomNavigationAction
             label="お気に入り"
-            value="/favorites"
+            value="favorites"
             icon={<FavoriteIcon />}
             sx={{ minWidth: 70, '& .MuiBottomNavigationAction-label': { fontSize: '0.6rem' } }}
           />
+
+          {/* 設定 */}
           <BottomNavigationAction
             label="設定"
             value="setting"
@@ -89,6 +92,7 @@ export default function BottomNav() {
           />
         </BottomNavigation>
       </Paper>
+
       {/* setting Drawer */}
       <SettingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>

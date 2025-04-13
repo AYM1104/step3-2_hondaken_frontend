@@ -14,6 +14,8 @@ import * as z from 'zod';
 // ✅ 下部ナビ（BottomNav）を読み込み
 import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
+import Header from '@/components/header/header';
+
 // 画面に表示する部品たち（MUI：Material UI）
 import {
   TextField,
@@ -138,16 +140,7 @@ export default function DogRegisterPage() {
         }}
       >
         {/* ✅ HondaDog ロゴ（中央寄せ） */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <img
-            src="/hondadog-logo.png"
-            alt="HondaDog"
-            style={{
-              height: 50,
-              objectFit: 'contain',
-            }}
-          />
-        </Box>
+        <Header />
 
         {/* タイトル */}
         <Typography

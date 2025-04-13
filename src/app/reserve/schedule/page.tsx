@@ -89,23 +89,24 @@ export default function SchedulePage() {
             return {
               id: item.id,
               name: item.name,
-              postalCode: item.postal_code,
-              // ✅ 住所は「都道府県 + 市区町村 + 番地」の形式で結合
+              distance: '1km',
+              duration: '5分',
+              // 住所は「都道府県 + 市区町村 + 番地」の形式で結合
               address: `${item.prefecture}${item.city}${item.address_line}`,
               imageUrl,
-              sizeTags: ['小型犬', '中型犬', '大型犬'],
+              sizeTags: ['超小型犬', '小型犬', '中型犬', '大型犬'],
               rating: 4.5,
               reviewCount: 123,
               features: ['一時預かり', '宿泊', 'カメラ見守り', 'ドッグラン'],
               description: 'スタッフによる見守りと快適な個室、広いドッグランで安心のサービスを提供します。',
-              price: '￥500',
+              price: '￥1,000',
             };
           })
         );
 
         setStores(formatted);
       } catch (error) {
-        console.error('店舗取得失敗:', error);
+        console.error('店舗取得エラー:', error);
       }
     };
 
@@ -154,9 +155,9 @@ export default function SchedulePage() {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <CustomTimePicker label="開始時間" value={startTime} onChange={setStartTime} />
+              <CustomTimePicker value={startTime} onChange={setStartTime} />
               <Typography>〜</Typography>
-              <CustomTimePicker label="終了時間" value={endTime} onChange={setEndTime} />
+              <CustomTimePicker value={endTime} onChange={setEndTime} />
             </Box>
           </LocalizationProvider>
         </Box>

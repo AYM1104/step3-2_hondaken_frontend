@@ -1,25 +1,19 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Typography,
-  Modal,
-  Chip,
-  IconButton,
-  Button,
-  Fade,
-  Backdrop,
-} from '@mui/material';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { Dayjs } from 'dayjs';
+
+// MUIコンポーネント
+import { Box, Typography, Modal, Chip, IconButton, Button, Fade, Backdrop } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import StarIcon from '@mui/icons-material/Star';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import HotelIcon from '@mui/icons-material/Hotel';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PetsIcon from '@mui/icons-material/Pets';
-import { useRouter } from 'next/navigation';
-import { Dayjs } from 'dayjs';
+
 
 interface StoreDetailModalProps {
   open: boolean;
@@ -35,12 +29,13 @@ interface StoreDetailModalProps {
     features: string[];
     description: string;
     price: string;
-  } | null;
+  };
   startTime: string;
   endTime: string;
   selectedDate: Dayjs;
 }
 
+export type { StoreDetailModalProps };
 export default function StoreDetailModal({
   open,
   onClose,
@@ -126,7 +121,7 @@ export default function StoreDetailModal({
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: '90%',
-            maxWidth: 400,
+            maxWidth: 600,
             bgcolor: 'background.paper',
             borderRadius: 4,
             p: 3,
@@ -143,13 +138,13 @@ export default function StoreDetailModal({
               top: 12,
               right: 12,
               bgcolor: 'white',
-              border: '2px solid #ccc',
+              border: '1px solid #ccc',
               width: 36,
               height: 36,
               zIndex: 10,
             }}
           >
-            <CloseIcon sx={{ color: '#FCC419' }} />
+            <CloseIcon sx={{ color: 'text.secondary' }} />
           </IconButton>
 
           {/* 店舗画像 */}
@@ -166,7 +161,7 @@ export default function StoreDetailModal({
                 key={index}
                 label={tag}
                 size="small"
-                sx={{ bgcolor: '#DEE2E6', color: '#212529' }}
+                sx={{ bgcolor: '#DEE2E6', color: '#212529', fontSize: '0.8rem', height: 36 }}
               />
             ))}
           </Box>
@@ -197,7 +192,7 @@ export default function StoreDetailModal({
             </Box>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <CameraAltIcon sx={{ fontSize: 36 }} />
-              <Typography variant="caption" display="block">ｶﾒﾗ見守り</Typography>
+              <Typography variant="caption" display="block">見守り</Typography>
             </Box>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <PetsIcon sx={{ fontSize: 36 }} />

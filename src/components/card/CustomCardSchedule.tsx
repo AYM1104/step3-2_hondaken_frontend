@@ -22,7 +22,7 @@ export default function CustomCardSchedule({
   store,
   onClickDetails,
 }: CustomCardScheduleProps) {
-  const { name, postalCode, address, imageUrl } = store;
+  const { name, address, imageUrl } = store;
   const [isFavorite, setIsFavorite] = useState(false);
 
   const RIGHT_WIDTH = 108;
@@ -56,9 +56,9 @@ export default function CustomCardSchedule({
         >
           {name}
         </Typography>
-        <Typography variant="caption" display="block" mb={0.5}>
+        {/* <Typography variant="caption" display="block" mb={0.5}>
           {postalCode}
-        </Typography>
+        </Typography> */}
         <Typography variant="caption" display="block">
           {address}
         </Typography>

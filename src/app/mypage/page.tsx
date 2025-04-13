@@ -22,6 +22,7 @@ const tabLabels = ['あずける', 'おむかえ'];
 
 // 予約データの型定義
 type Reservation = {
+  id: number;
   location_id: number;
   check_in_time: string;
   check_out_time: string;
@@ -226,7 +227,7 @@ export default function Page() {
                   storeName={locationMap[r.location_id] || '店舗情報取得中'}
                   date={formatDate(r.check_in_time)}
                   timeSlot={formatTime(r.check_in_time, r.check_out_time)}
-                  onClickQRCode={() => alert('QRコードを表示します')}
+                  onClickQRCode={() => router.push(`/checkin/qr/${r.id}`)}
                 />
               </Box>
             ))

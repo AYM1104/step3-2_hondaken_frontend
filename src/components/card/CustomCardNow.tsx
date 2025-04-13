@@ -9,11 +9,20 @@ import { Box, Typography, Stack } from '@mui/material';
 export type Store = {
   id: number;
   name: string;
+  imageUrl: string;
   distance: string; // 例: "1km"
   duration: string; // 例: "5m"
   isSelected?: boolean;
   onSelect: () => void;
   onDetail: () => void;
+  // ✅ StoreDetailModalが使うフィールドを追加
+  address: string;
+  sizeTags: string[];
+  rating: number;
+  reviewCount: number;
+  features: string[];
+  description: string;
+  price: string;
 };
 
 type CustomCardNowProps = {

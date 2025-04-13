@@ -35,12 +35,12 @@ interface StoreDetailModalProps {
     features: string[];
     description: string;
     price: string;
-  } | null;
+  };
   startTime: string;
   endTime: string;
   selectedDate: Dayjs;
 }
-
+export type { StoreDetailModalProps };
 export default function StoreDetailModal({
   open,
   onClose,
@@ -155,7 +155,7 @@ export default function StoreDetailModal({
           {/* 店舗画像 */}
           {store.imageUrl && (
             <Box sx={{ width: '100%', height: 180, position: 'relative', borderRadius: 2, overflow: 'hidden', mb: 2 }}>
-              <Image src={store.imageUrl} alt={store.name} fill style={{ objectFit: 'cover' }} />
+              <img src={store.imageUrl} alt={store.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', }} />
             </Box>
           )}
 
@@ -186,7 +186,7 @@ export default function StoreDetailModal({
             Facilities
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, mb: 2, gap: 2 }}>
-            {/* 各施設アイコン */}
+          {/* 各施設アイコン */}
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <AccessTimeIcon sx={{ fontSize: 36 }} />
               <Typography variant="caption" display="block">一時預かり</Typography>

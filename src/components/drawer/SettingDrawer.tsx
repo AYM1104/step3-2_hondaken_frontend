@@ -31,7 +31,7 @@ const SettingDrawer: React.FC<Props> = ({ open, onClose }) => {
       <div style={{ width: 250, padding: 16 }}>
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push('/account/profile')}>
+            <ListItemButton onClick={() => router.push('/setting/user')}>
               <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary="ユーザープロフィール" />
             </ListItemButton>

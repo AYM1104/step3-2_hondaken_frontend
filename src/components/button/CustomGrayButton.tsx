@@ -28,6 +28,7 @@ type CustomGrayButtonProps = {
   sx?: ButtonProps['sx'];
   startIcon?: React.ReactNode; 
   endIcon?: React.ReactNode;   
+  component?: React.ElementType;
 };
 
 export default function CustomGrayButton({
@@ -39,6 +40,7 @@ export default function CustomGrayButton({
 }: CustomGrayButtonProps) {
   return (
     <StyledButton
+      component="label"
       variant="contained"
       onClick={onClick}
       sx={sx}

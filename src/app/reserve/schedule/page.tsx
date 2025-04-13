@@ -18,6 +18,7 @@ import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import StoreDetailModal from '@/components/modal/StoreDetailModal'; // 
 import BottomNav from '@/components/BottomNavigation/BottomNavigation';
+import Image from 'next/image';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -72,21 +73,35 @@ export default function SchedulePage() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/?skip=0&limit=2`);
         const data = await res.json();
 
-        // フォーマット整形
-        const formatted = data.map((item: RawStore) => ({
-          id: item.id,
-          name: item.name,
-          postalCode: item.postal_code,
-          // ✅ 住所は「都道府県 + 市区町村 + 番地」の形式で結合
-          address: `${item.prefecture}${item.city}${item.address_line}`,
-          imageUrl: '/Honda-dealer.png', // 固定画像
-          sizeTags: ['小型犬', '中型犬', '大型犬'],
-          rating: 4.5,
-          reviewCount: 123,
-          features: ['一時預かり', '宿泊', 'カメラ見守り', 'ドッグラン'],
-          description: 'スタッフによる見守りと快適な個室、広いドッグランで安心のサービスを提供します。',
-          price: '￥500',
-        }));
+        // フォーマット整形 + ✅ 画像URLを取得
+        const formatted = await Promise.all(
+          data.map(async (item: any) => {
+            let imageUrl = '/Honda-dealer.png'; // デフォルト画像
+
+            try {
+              const imgRes = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}locations/${item.id}/image`);
+              const imgData = await imgRes.json();
+              imageUrl = imgData.image_url;
+            } catch (err) {
+              console.error(`画像取得失敗 (店舗ID: ${item.id}):`, err);
+            }
+
+            return {
+              id: item.id,
+              name: item.name,
+              postalCode: item.postal_code,
+              // ✅ 住所は「都道府県 + 市区町村 + 番地」の形式で結合
+              address: `${item.prefecture}${item.city}${item.address_line}`,
+              imageUrl,
+              sizeTags: ['小型犬', '中型犬', '大型犬'],
+              rating: 4.5,
+              reviewCount: 123,
+              features: ['一時預かり', '宿泊', 'カメラ見守り', 'ドッグラン'],
+              description: 'スタッフによる見守りと快適な個室、広いドッグランで安心のサービスを提供します。',
+              price: '￥500',
+            };
+          })
+        );
 
         setStores(formatted);
       } catch (error) {

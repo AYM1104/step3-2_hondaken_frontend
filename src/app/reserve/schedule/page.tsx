@@ -18,7 +18,7 @@ import CustomCardSchedule from '@/components/card/CustomCardSchedule';
 import CustomTimePicker from '@/components/time/CustomTimePicker';
 import StoreDetailModal from '@/components/modal/StoreDetailModal'; // 
 import BottomNav from '@/components/BottomNavigation/BottomNavigation';
-import Image from 'next/image';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -75,7 +75,7 @@ export default function SchedulePage() {
 
         // フォーマット整形 + ✅ 画像URLを取得
         const formatted = await Promise.all(
-          data.map(async (item: any) => {
+          data.map(async (item: RawStore) => {
             let imageUrl = '/Honda-dealer.png'; // デフォルト画像
 
             try {

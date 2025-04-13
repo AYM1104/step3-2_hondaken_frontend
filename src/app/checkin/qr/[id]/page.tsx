@@ -223,7 +223,7 @@ export default function QRCodePage() {
               pr: 4,
             }}
           >
-            {reservationInfo?.details?.slice(0, 3).map((item, index) => (
+            {reservationInfo?.details?.slice(0, 3).map((item: DetailItem, index: number) => (
               <Box key={index}>
                 <Typography fontSize={12} color="text.secondary">
                   {item.label}
@@ -245,7 +245,7 @@ export default function QRCodePage() {
               pl: 4,
             }}
           >
-            {reservationInfo?.details?.slice(3).map((item, index) => (
+            {reservationInfo?.details?.slice(3).map((item: DetailItem, index: number) => (
               <Box key={index}>
                 <Typography fontSize={12} color="text.secondary">
                   {item.label}

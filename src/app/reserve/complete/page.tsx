@@ -7,6 +7,7 @@ import Image from 'next/image';
 // import { useRouter } from 'next/navigation';
 // カスタムコンポーネント
 import Header from '@/components/header/header';
+import BottomNav from '@/components/BottomNavigation/BottomNavigation';
 
 export default function ReserveCompletePage() {
   // const router = useRouter();
@@ -113,6 +114,8 @@ export default function ReserveCompletePage() {
           </Box>
         </Box>
       </Box>
-    </Box>
+      {/* ボトムナビ */}
+      <BottomNav />
+    </Box> 
   );
 }

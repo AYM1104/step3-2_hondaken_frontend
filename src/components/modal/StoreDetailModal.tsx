@@ -97,7 +97,7 @@ export default function StoreDetailModal({
         return;
       }
 
-      alert('予約が完了しました');
+      // alert('予約が完了しました');
       router.push('/reserve/complete');
     } catch (err) {
       console.error('通信エラー:', err);

@@ -406,7 +406,7 @@ export default function NowPage() {
         return;
       }
 
-      alert('予約完了！');
+      // alert('予約完了！');
       router.push('/reserve/complete'); // 完了ページへ移動
     } catch (err) {
       console.error('通信エラー:', err);
